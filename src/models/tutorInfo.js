@@ -1,37 +1,6 @@
 import mongoose from 'mongoose'
 
 
-const SlotSchema = new mongoose.Schema({
-  from: {
-    type: String,
-    // required: true,
-    trim: true,
-  },
-  to: {
-    type: String,
-    // required: true,
-    trim: true,
-  },
-  isAvailable: {
-    type: Boolean,
-    default: true,
-  },
-});
-
-
-
-const CoordinatorSchema = {
-  coordinatorId: {
-    type: String,
-    trim: true,
-  },
-  coordinatorName: {
-    type: String,
-    trim: true,
-  },
-}
-
-
 const LogInDetailsSchema = {
   isLoggedIn: {
     type: Boolean,
@@ -67,8 +36,6 @@ const AddressSchema = {
   }
 };
 
-
-
 const tutorInfoSchema = new mongoose.Schema(
   {
     firstName: {
@@ -82,8 +49,8 @@ const tutorInfoSchema = new mongoose.Schema(
       trim: true,
     },
     userCode: {
-      type: mongoose.Schema.Types.ObjectId,
-      default: () => new mongoose.Types.ObjectId(),
+      type: String,
+      default: () => new mongoose.Types.ObjectId().toString(),
     },
     tutorName: {
       required: true,
@@ -134,26 +101,26 @@ const tutorInfoSchema = new mongoose.Schema(
       default: "Bank Transfer",
     },
     AccountDetails: {
-      type: String,
-    },
-    PaymentList: {
-      type: [String],
+      
+      AccountNumber : {
+        type: String,
+      },
+      IFSC_Code:{
+        type: String,
+      },
+      Branch:{
+        type: String,
+      }
     },
     userType: {
       required: true,
       type: String,
 
     },
-    slotsAvailable: {
-      Monday: [SlotSchema],
-      Tuesday: [SlotSchema],
-      Wednesday: [SlotSchema],
-      Thursday: [SlotSchema],
-      Friday: [SlotSchema],
-      Saturday: [SlotSchema],
-      Sunday: [SlotSchema],
+    Coordinator: {
+      type: String,
+      trim: true,
     },
-    coordinator: CoordinatorSchema,
     logInDetails: LogInDetailsSchema,
   },
   {
