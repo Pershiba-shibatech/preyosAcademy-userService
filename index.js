@@ -1,6 +1,7 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv';
+import cors from 'cors'
 import {tutorRoutes} from './src/User/routes.js';
 
 dotenv.config()
@@ -8,6 +9,7 @@ const  mongoString = process.env.MONGOURI;
 const PORT = process.env.PORT;
 
 const app = express()
+app.use(cors());
 app.use(express.json());
 
 app.use(tutorRoutes)

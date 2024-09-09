@@ -3,7 +3,7 @@ import tutorInfo from "../models/TutorInfo.js"
 
 
 export const LoginDao = async (email, type) => {
-    if (type === 0) {
+    if (type === 1) {
         let TutorDetails = await tutorInfo.findOne({ email: email }, { _id: 0, __v: 0 }).lean();
 
         if (TutorDetails) {
