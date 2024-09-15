@@ -25,7 +25,7 @@ export const getStudentAvailableSlots = async(data)=>{
     if (data.subjects && Array.isArray(data.subjects) && data.subjects.length > 0) {
         query.subjects = { $in: data.subjects };
     }
-    console.log(query,"query");
+  
 
     
     AvailableSlots = await TutorSlots.find(query);

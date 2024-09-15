@@ -69,7 +69,7 @@ export const getAvailableSlotsForStudent = async (data) => {
             timestamps=moment().format('x')
         } else {
             Day = moment(data.day).format('dddd')
-            console.log(1725476319604,"1725476319604")
+      
             timestamps = data.day
         }
 

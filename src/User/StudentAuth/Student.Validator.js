@@ -29,11 +29,10 @@ export const createStudentValidator = async (data) => {
 
 
     const invalidKeys = providedKeys.filter((key) => !allowedKeys.includes(key));
-    console.log(invalidKeys,"invalidKeys")
     if (invalidKeys.length > 0 || providedKeys.length !== allowedKeys.length) {
         throw new Error(`Extra/Invalid keys passed in the request body`);
     }
-    console.log("called");
+   
     if (firstName.length === 0) {
         throw new Error(`FirstName should be a non empty string!`);
     }

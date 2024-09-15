@@ -2,14 +2,20 @@ import express from 'express'
 import { AddTutorSlotsByAdminController, createTutorController } from './TutorAuth/Tutor.Controller.js';
 import { loginController } from './Login-Logout/loginLogout.controllers.js';
 import { createStudentController, getAvailableSlotsForStudentController } from './StudentAuth/Student.controller.js';
+import { fileuploadMiddleware } from '../Middleware/uploadMiddleWare.js';
+import { BookSlotsbyStudentController } from './BookSlots/BookSlots.controllers.js';
 
-export const tutorRoutes = express.Router();
 
-tutorRoutes.post('/loginUser', loginController)
+export const Routes = express.Router();
 
-tutorRoutes.post('/createTutor', createTutorController)
-tutorRoutes.post('/addSlots', AddTutorSlotsByAdminController)
+Routes.post('/loginUser', loginController)
 
-tutorRoutes.post('/createStudent', createStudentController)
-tutorRoutes.post('/fetchAvailableSlotsforStudent', getAvailableSlotsForStudentController)
+
+Routes.post('/createTutor', createTutorController)
+Routes.post('/addSlots', AddTutorSlotsByAdminController)
+
+Routes.post('/createStudent', createStudentController)
+Routes.post('/fetchAvailableSlotsforStudent', getAvailableSlotsForStudentController)
+Routes.post('/bookSlot', fileuploadMiddleware, BookSlotsbyStudentController)
+
 

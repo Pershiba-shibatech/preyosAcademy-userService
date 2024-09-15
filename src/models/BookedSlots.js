@@ -11,19 +11,32 @@ const BookedSlotsSchema = new mongoose.Schema({
         type: String,
         trim: true,
     },
-    tutorUsercode: {
-        required: true,
-        type: String,
-        trim: true,
-    },
     sessionMaterial: {
+        url: {
+
+            type: String,
+            trim: true,
+        },
+        display_name: {
+
+            type: String,
+            trim: true,
+        },
+        format: {
+
+            type: String,
+            trim: true,
+        }
+    },
+   tutorUsercode: {
         required: true,
         type: String,
         trim: true,
     },
     sessionId: {
+        required: true,
         type: String,
-        default: () => new mongoose.Types.ObjectId().toString(),
+        // default: () => new mongoose.Types.ObjectId().toString(),
     },
     sessionDetails: {
         required: true,
@@ -50,23 +63,41 @@ const BookedSlotsSchema = new mongoose.Schema({
         type: String,
         trim: true,
     }, topic: {
-        required: true,
+
         type: String,
         trim: true,
     }, homeworkStatus: {
-        required: true,
+
         type: String,
         trim: true,
     }, sessionSummary: {
-        required: true,
+
         type: String,
         trim: true,
     }, studentFeedbackByTutor: {
-        required: true,
+
         type: String,
         trim: true,
+    },
+    sessionBookingDetails: {
+        from: {
+            required: true,
+            type: String,
+        },
+        to: {
+            required: true,
+            type: String,
+        },
+        id: {
+            required: true,
+            type: String,
+        }
+
     }
 
+
+}, {
+    timestamps: true,
 })
 
 const BookedSlots = mongoose.model("bookedSlots", BookedSlotsSchema);
