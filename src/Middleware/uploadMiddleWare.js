@@ -46,8 +46,8 @@ export const fileuploadMiddleware = async (req, res, next) => {
             }
         }
 
-      
-        req.files = files;
+        // console.log(files, "files")
+        req.files =  files;
 
         next();
     } catch (error) {

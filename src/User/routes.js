@@ -3,7 +3,7 @@ import { AddTutorSlotsByAdminController, createTutorController } from './TutorAu
 import { loginController } from './Login-Logout/loginLogout.controllers.js';
 import { createStudentController, getAvailableSlotsForStudentController } from './StudentAuth/Student.controller.js';
 import { fileuploadMiddleware } from '../Middleware/uploadMiddleWare.js';
-import { BookSlotsbyStudentController } from './BookSlots/BookSlots.controllers.js';
+import { BookSlotsbyStudentController, GetBookedSlotsController } from './BookSlots/BookSlots.controllers.js';
 
 
 export const Routes = express.Router();
@@ -18,4 +18,4 @@ Routes.post('/createStudent', createStudentController)
 Routes.post('/fetchAvailableSlotsforStudent', getAvailableSlotsForStudentController)
 Routes.post('/bookSlot', fileuploadMiddleware, BookSlotsbyStudentController)
 
-
+Routes.post('/fetchStudentBookedSlots', GetBookedSlotsController)

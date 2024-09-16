@@ -1,4 +1,4 @@
-import { BookSlotsByStudentService } from "./BookSlots.service.js"
+import { BookSlotsByStudentService, GetBookedSlotsByStudentService } from "./BookSlots.service.js"
 
 export const BookSlotsbyStudentController = async(req,res)=>{
 
@@ -7,6 +7,23 @@ export const BookSlotsbyStudentController = async(req,res)=>{
         res.send({
             statusCode: 200,
             message: `Slot booked Successfully!`,
+            result: response
+        })
+
+    }).catch((error) => {
+        res.send({
+            statusCode: 500,
+            message: error.message,
+            result: []
+        })
+    })
+}
+
+export const GetBookedSlotsController=async(req,res)=>{
+    await GetBookedSlotsByStudentService(req.body).then((response)=>{
+        res.send({
+            statusCode: 200,
+            message: `Slot fetched Successfully!`,
             result: [response]
         })
 

@@ -26,6 +26,9 @@ const SlotData = {
         type: Boolean,
         required: true,
         default: false,
+    },bookedData:{
+        type:[String],
+        default:[]
     }
 }
 
