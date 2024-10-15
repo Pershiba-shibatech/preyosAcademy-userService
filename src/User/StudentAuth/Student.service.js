@@ -1,5 +1,5 @@
 import moment from "moment"
-import { createStudentDao, getStudentAvailableSlots, getStudentList } from "../../Dao/StudentDao.js"
+import { createStudentDao, fetchstudentByEmail, getStudentAvailableSlots, getStudentList } from "../../Dao/StudentDao.js"
 import { createStudentValidator } from "./Student.Validator.js"
 import { fetchSingleuser } from "../../Dao/TutorDao.js"
 
@@ -28,8 +28,14 @@ export const createStudentService = async (body) => {
         paymentMethod: "Bank Transfer",
         userType: body.userType,
         Coordinator: body.Coordinator,
+        Dob:body.Dob,
         logInDetails: { lastLogged: "", isLoggedIn: false }
     }
+    const checkAvailable = await fetchstudentByEmail(body.email)
+    if(checkAvailable.length>0){
+         throw new Error(`Student already exist with the same email`);
+    }
+
     let studentDetails = await createStudentDao(studentData)
     if (studentDetails) {
         let responseData = {
@@ -109,5 +115,34 @@ export const getAvailableSlotsForStudent = async (data) => {
 
 export const GetAllStudentList =async()=> {
     let studentList = await getStudentList()
+    studentList = await Promise.all(studentList.map(async (studentDetails) => {
+        // Fetch tutorDetails for each student
+        const tutorDetails = await fetchSingleuser(studentDetails.Coordinator);
+        // Return the student object with an additional `coordinator` property
+        return {
+            userCode: studentDetails.userCode,
+            firstName: studentDetails.firstName,
+            lastName: studentDetails.lastName,
+            studentName: studentDetails.studentName,
+            parentName: studentDetails.studentName,
+            subjects: studentDetails.subjects,
+            grade: studentDetails.grade,
+            Requirements: studentDetails.Requirements,
+            Address: studentDetails.Address,
+            AccountDetails: studentDetails.AccountDetails,
+            phoneNumber: studentDetails.phoneNumber,
+            countryCode: studentDetails.countryCode,
+            phoneWithoutCountryCode: studentDetails.phoneWithoutCountryCode,
+            email: studentDetails.email,
+            password: studentDetails.password,
+            timeZone: studentDetails.timeZone,
+            paymentMethod: studentDetails.paymentMethod,
+            userType: studentDetails.userType,
+            Coordinator: tutorDetails,
+            logInDetails: studentDetails.logInDetails,       
+          
+        };
+      }));
+     
     return studentList
   }

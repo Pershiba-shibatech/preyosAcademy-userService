@@ -16,14 +16,15 @@ export const createStudentValidator = async (data) => {
         "password",
         "timeZone",
         "userType",
-        "Coordinator"
+        "Coordinator",
+        "Dob"
     ];
     const providedKeys = Object.keys(data);
    
-    if (providedKeys.length < 16) {
+    if (providedKeys.length < 17) {
         throw new Error(`Few Keys are missing in response body`);
     }
-    if (providedKeys.length > 16){
+    if (providedKeys.length > 17){
         throw new Error(`Passed Extra keys in response body`);
     }
 

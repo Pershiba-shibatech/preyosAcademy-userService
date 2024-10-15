@@ -132,6 +132,9 @@ const StudentInfoSchema = new mongoose.Schema(
             type: String,
             trim: true,
         },
+        Dob:{
+            type: String,
+          },
         logInDetails: LogInDetailsSchema,
     },
     {

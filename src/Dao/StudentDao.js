@@ -46,3 +46,8 @@ export const getStudentList=async()=>{
     const StudentList = await StudentInfo.find({},{_id:0,__v:0})
     return StudentList
 }
+
+export const fetchstudentByEmail =  async (data)=>{
+    const tutorDetails = await StudentInfo.find({ email: data })
+    return tutorDetails
+}

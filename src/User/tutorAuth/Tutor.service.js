@@ -1,4 +1,4 @@
-import { AddSlotsDao, createTutorDao, fetchByEmail, getTutorsList } from "../../Dao/TutorDao.js";
+import { AddSlotsDao, createTutorDao, fetchByEmail, fetchSingleuser, getTutorsList } from "../../Dao/TutorDao.js";
 import { createtutorvalidator } from "./Tutor.Validator.js";
 
 export const createTutorService = async (body) => {
@@ -91,5 +91,31 @@ export const AddtutorSlotByAdminService = async (body) => {
 
 export const GetAllTutorsList =async()=> {
   let tutorsList = await getTutorsList()
+  tutorsList = await Promise.all(tutorsList.map(async (tutorDetails) => {
+    // Fetch tutorDetails for each student
+    const coordinatorDetails = await fetchSingleuser(tutorDetails.Coordinator);
+    // Return the student object with an additional `coordinator` property
+    return {
+        userCode: tutorDetails.userCode,
+            firstName: tutorDetails.firstName,
+            lastName: tutorDetails.lastName,
+            tutorName: tutorDetails.tutorName,
+            subjects: tutorDetails.subjects,
+            experince: tutorDetails.experince,
+            Address: tutorDetails.Address,
+            AccountDetails: tutorDetails.AccountDetails,
+            phoneNumber: tutorDetails.phoneNumber,
+            countryCode: tutorDetails.countryCode,
+            phoneWithoutCountryCode: tutorDetails.phoneWithoutCountryCode,
+            email: tutorDetails.email,
+            password: tutorDetails.password,
+            timeZone: tutorDetails.timeZone,
+            paymentMethod: "Bank Transfer",
+            userType: tutorDetails.userType,
+            Coordinator: coordinatorDetails,
+            logInDetails: tutorDetails.logInDetails       
+      
+    };
+  }));
   return tutorsList
 }
