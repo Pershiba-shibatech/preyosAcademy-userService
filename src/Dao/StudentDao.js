@@ -40,3 +40,9 @@ export const fetchSingleStudentDetails = async (data) => {
     })
     return getStudentDetails
 }
+
+
+export const getStudentList=async()=>{
+    const StudentList = await StudentInfo.find({},{_id:0,__v:0})
+    return StudentList
+}

@@ -2,10 +2,16 @@ import tutorInfo from '../models/TutorInfo.js'
 import TutorSlots from '../models/TutorSlots.js'
 
 export const createTutorDao = async (data) => {
+    
     const tutorDetails = await tutorInfo.create(data)
     if (tutorDetails) {
         return tutorDetails
     }
+}
+
+export const fetchByEmail =  async (data)=>{
+    const tutorDetails = await tutorInfo.find({ email: data })
+    return tutorDetails
 }
 
 export const AddSlotsDao = async (data) => {
@@ -24,6 +30,9 @@ export const fetchSingleuser = async (userCode) => {
     }
 }
 
-
+export const getTutorsList=async()=>{
+    const TutorsList = await tutorInfo.find({},{_id:0,__v:0})
+    return TutorsList
+}
 
 

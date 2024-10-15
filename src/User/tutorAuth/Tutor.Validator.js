@@ -14,12 +14,13 @@ export const createtutorvalidator = async (data) => {
         "password",
         "timeZone",
         "userType",
-        "Coordinator"
+        "Coordinator",
+        "Dob","Qualification"
     ];
     const providedKeys = Object.keys(data);
 
-    if (providedKeys.length !== 14) {
-        throw new Error(`Few Keys are missing in response body`);
+    if (providedKeys.length < 16) {
+        throw new Error(`Few Keys are missing / extra keys in response body`);
     }
 
     const invalidKeys = providedKeys.filter((key) => !allowedKeys.includes(key));

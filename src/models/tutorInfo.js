@@ -8,7 +8,7 @@ const LogInDetailsSchema = {
   },
   lastLogged: {
     type: String,
-
+    default:""
   },
 }
 const AddressSchema = {
@@ -121,6 +121,13 @@ const tutorInfoSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    Dob:{
+      type: String,
+    },
+    Qualification:{
+      type: String,
+    },
+  
     logInDetails: LogInDetailsSchema,
   },
   {

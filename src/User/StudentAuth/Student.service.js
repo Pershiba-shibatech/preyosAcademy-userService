@@ -1,5 +1,5 @@
 import moment from "moment"
-import { createStudentDao, getStudentAvailableSlots } from "../../Dao/StudentDao.js"
+import { createStudentDao, getStudentAvailableSlots, getStudentList } from "../../Dao/StudentDao.js"
 import { createStudentValidator } from "./Student.Validator.js"
 import { fetchSingleuser } from "../../Dao/TutorDao.js"
 
@@ -105,3 +105,9 @@ export const getAvailableSlotsForStudent = async (data) => {
     return {};
 
 }
+
+
+export const GetAllStudentList =async()=> {
+    let studentList = await getStudentList()
+    return studentList
+  }

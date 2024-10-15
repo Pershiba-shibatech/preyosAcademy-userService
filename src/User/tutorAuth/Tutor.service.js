@@ -1,4 +1,4 @@
-import { AddSlotsDao, createTutorDao } from "../../Dao/TutorDao.js";
+import { AddSlotsDao, createTutorDao, fetchByEmail, getTutorsList } from "../../Dao/TutorDao.js";
 import { createtutorvalidator } from "./Tutor.Validator.js";
 
 export const createTutorService = async (body) => {
@@ -22,8 +22,14 @@ export const createTutorService = async (body) => {
         paymentMethod: "Bank Transfer",
         userType: body.userType,
         Coordinator: body.Coordinator,
-        logInDetails: { lastLogged: "", isLoggedIn: false }
+        logInDetails: { lastLogged: "", isLoggedIn: false },
+        Dob:body.Dob,
+        Qualification:body.Qualification
 
+    }
+    const checkAvailable = await fetchByEmail(body.email)
+    if(checkAvailable.length>0){
+         throw new Error(`Tutor already exist with the same email`);
     }
     let tutorDetails = await createTutorDao(tutorData)
     if (tutorDetails) {
@@ -80,4 +86,10 @@ export const AddtutorSlotByAdminService = async (body) => {
         }
         return SlotList
     }
+}
+
+
+export const GetAllTutorsList =async()=> {
+  let tutorsList = await getTutorsList()
+  return tutorsList
 }
