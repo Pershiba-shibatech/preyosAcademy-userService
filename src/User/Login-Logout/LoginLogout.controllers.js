@@ -1,4 +1,4 @@
-import { loginService } from "./loginLogout.service.js"
+import { loginService } from "./LoginLogout.service.js"
 
 export const loginController = async (req, res) => {
     await loginService(req.body).then((response) => {
