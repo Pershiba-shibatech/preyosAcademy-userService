@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@vercel/node": "^3.2.23",
     "cloudinary": "^2.5.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -17,7 +18,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./src/index.js",
-    "dev":"nodemon ./src/index.js"
+    "dev": "nodemon ./src/index.js"
   },
   "author": "",
   "license": "ISC",
