@@ -1,5 +1,5 @@
 import express from 'express'
-import { AddTutorSlotsByAdminController, createTutorController, getTutorsList } from './TutorAuth/Tutor.controller.js';
+import { AddTutorSlotsByAdminController, createTutorController, getTutorsList } from './tutorAuth/Tutor.controller.js';
 import { loginController } from './Login-Logout/loginLogout.controllers.js';
 import { createStudentController, getAvailableSlotsForStudentController, getStudentsList } from './StudentAuth/Student.controller.js';
 import { fileuploadMiddleware } from '../Middleware/uploadMiddleWare.js';
