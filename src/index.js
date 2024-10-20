@@ -8,7 +8,7 @@ import { Routes } from './User/routes.js'
 
 // dotenv.config()
 const PORT = "4000"
-const MONGOURI = "mongodb+srv://shibatech06:WGusDjuuIdUiIYvi@educationalportal.dqe7jah.mongodb.net/educationalportal"
+const MONGOURI = "mongodb+srv://shibatech06:WGusDjuuIdUiIYvi@educationalportal.dqe7jah.mongodb.net/educationalportal?retryWrites=true&w=majority"
 // const CLOUDINARY_CLOUD_NAME = "dwm8g1j8i"
 // const CLOUDINARY_API_KEY = "745971731583546"
 // const CLOUDINARY_API_SECRET = "rs96Q4RdDvys-NUwubZHvoGShj8"
@@ -23,7 +23,9 @@ app.use(cors());
 app.use(express.json());
 
 app.use(Routes)
-
+app.get('/', (req, res) => {
+    res.send('Hello from Vercel');
+});
 app.listen(PORT, () => {
     mongoose.connect(mongoString);
     const database = mongoose.connection
