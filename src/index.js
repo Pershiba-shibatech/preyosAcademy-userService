@@ -2,8 +2,9 @@ import express from 'express'
 import mongoose from 'mongoose'
 // import dotenv from 'dotenv';
 import cors from 'cors'
-import { Routes } from './src/User/routes.js';
+
 import { v2 as cloudinary } from 'cloudinary'
+import { Routes } from './User/routes.js'
 
 // dotenv.config()
 const PORT = "4000"

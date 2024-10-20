@@ -1,5 +1,6 @@
+import { cloudinary } from "../../index.js";
 
-import { cloudinary } from '../../../index.js';
+
 
 export const uploadFile = async (filePath, sessionId, studenUsercode) => {
     try {
