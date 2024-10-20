@@ -1,13 +1,19 @@
 import express from 'express'
 import mongoose from 'mongoose'
-import dotenv from 'dotenv';
+// import dotenv from 'dotenv';
 import cors from 'cors'
 import { Routes } from './src/User/routes.js';
 import { v2 as cloudinary } from 'cloudinary'
 
-dotenv.config()
-const  mongoString = process.env.MONGOURI;
-const PORT = process.env.PORT;
+// dotenv.config()
+const PORT = "4000"
+const MONGOURI = "mongodb+srv://shibatech06:WGusDjuuIdUiIYvi@educationalportal.dqe7jah.mongodb.net/educationalportal"
+const CLOUDINARY_CLOUD_NAME = "dwm8g1j8i"
+const CLOUDINARY_API_KEY = "745971731583546"
+const CLOUDINARY_API_SECRET = "rs96Q4RdDvys-NUwubZHvoGShj8"
+const CLOUDINARY_URL = "cloudinary://745971731583546:rs96Q4RdDvys-NUwubZHvoGShj8@dwm8g1j8i"
+const mongoString = MONGOURI;
+
 // const cloudinary = require('cloudinary').v2;
 
 
@@ -25,9 +31,9 @@ app.listen(PORT, () => {
     })
   
     cloudinary.config({
-        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-        api_key: process.env.CLOUDINARY_API_KEY,
-        api_secret: process.env.CLOUDINARY_API_SECRET
+        cloud_name: CLOUDINARY_CLOUD_NAME,
+        api_key: CLOUDINARY_API_KEY,
+        api_secret: CLOUDINARY_API_SECRET
         
     });
 

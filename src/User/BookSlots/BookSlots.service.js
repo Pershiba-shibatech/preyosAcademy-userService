@@ -1,13 +1,13 @@
-import { GetBookedSlotsofStudentDao, updateSlotDetails } from "../../Dao/BookedSlotsDao.js";
+import { BookaSlotByStudent, GetBookedSlotsofStudentDao, getSlotsForBooking, getSlotsfromDb, updateSlotDetails } from "../../Dao/BookedSlotsDao.js";
 import { fetchSingleStudentDetails } from "../../Dao/StudentDao.js";
 import { fetchSingleuser } from "../../Dao/TutorDao.js";
-import { getSessionDetails, updateBookedStatus } from "../../Dao/Tutorslots.js";
+import { getSessionDetails, updateBookedStatus, updateSlotBooked } from "../../Dao/Tutorslots.js";
 import { uploadFile } from "./BookSlots.Validator.js";
 import mongoose from 'mongoose';
 const ObjectId = mongoose.Types.ObjectId;
 
 export const BookSlotsByStudentService = async (body, file) => {
-    console.log(file, "file")
+  
     const sessionId = new ObjectId();
     let fileUploadData
     if (file.hasOwnProperty('sessionMaterial')) {
@@ -71,40 +71,104 @@ export const BookSlotsByStudentService = async (body, file) => {
             sessionLink: bookedSlot.sessionLink,
             sessionStatus: bookedSlot.sessionStatus,
             sessionSubject: bookedSlot.sessionSubject,
-            sessionSummary: bookedSlot.sessionSummary,           
+            sessionSummary: bookedSlot.sessionSummary,
             studentFeedbackByTutor: bookedSlot.studentFeedbackByTutor,
             topic: bookedSlot.topic
         }
         return resultData
     }
-    
+
 
 }
 
 
-export const GetBookedSlotsByStudentService = async (body) => {
-    const bookedSlots = await GetBookedSlotsofStudentDao(body.studenUsercode)
+export const BookSlotsByTutor = async (body) => {
+   
+    let SessionDBDetails = body.sessionBookingDetails.map((item) => {
+        return {
+            studenUsercode: body.studenUsercode,
+            Bookedby: body.Bookedby,
+            tutorUsercode: body.tutorUsercode,
+            sessionMaterial: body.sessionMaterial,
+            sessionId: new ObjectId(),
+            sessionDetails: body.sessionDetails,
+            sessionSubject: body.sessionSubject,
+            paymentStatus: body.paymentStatus,
+            sessionLink: body.sessionLink,
+            sessionStatus: body.sessionStatus,
+            topic: "",
+            homeworkStatus: "",
+            sessionSummary: "",
+            studentFeedbackByTutor: "",
+            sessionBookingDetails: item
+        }
+    })
+
+    const checkSlotExist = await getSessionDetails(body.sessionDetails)
+    
+    if (checkSlotExist) {
+        let SessionCreated = await BookaSlotByStudent(SessionDBDetails)
+
+        SessionCreated = await Promise.all(
+            SessionCreated?.map(async (slot) => {
+
+                const sessionDetails = await updateSlotBooked(slot.tutorUsercode, slot.sessionDetails, body.AllDate);
+
+                return {
+                    sessionId: slot.sessionId,
+                    studenUsercode: slot.studenUsercode,
+                    Bookedby: slot.Bookedby,
+                    tutorUsercode: slot.tutorUsercode,
+                    sessionMaterial: slot.sessionMaterial,
+                    sessionDetails: slot.sessionDetails,
+                    sessionSubject: slot.sessionSubject,
+                    paymentStatus: slot.paymentStatus,
+                    sessionLink: slot.sessionLink,
+                    sessionStatus: slot.sessionStatus,
+                    topic: slot.topic,
+                    homeworkStatus: slot.homeworkStatus,
+                    sessionSummary: slot.sessionSummary,
+                    studentFeedbackByTutor: slot.studentFeedbackByTutor,
+                    sessionBookingDetails: slot.sessionBookingDetails
+                }
+
+
+            })
+        );
+
+        return SessionCreated;
+
+    } else {
+        throw Error('Slot Not found')
+    }
+
+
+
+
+}
+
+
+export const GetBookedSlotsService = async (body) => {
+    const bookedSlots = await GetBookedSlotsofStudentDao(body)
     if (bookedSlots.length > 0) {
 
         const studentDetails = await fetchSingleStudentDetails(bookedSlots[0].studenUsercode);
-        // Use Promise.all to wait for all the async operations inside the map
+      
         const resultDataArray = await Promise.all(
             bookedSlots.map(async (bookedSlot) => {
 
                 const tutorDetails = await fetchSingleuser(bookedSlot.tutorUsercode);
-                console.log(bookedSlot.sessionDetails, "sessionDetails")
-                // Fetch session details using sessionDetails or sessionId
-                const sessionDetails = await getSessionDetails(bookedSlot.sessionDetails, bookedSlot.sessionBookingDetails);
+              
+               
+                //const sessionDetails = await getSessionDetails(bookedSlot.sessionDetails, bookedSlot.sessionBookingDetails);
 
-                // Construct the result data for each booked slot
+               
                 const resultData = {
                     studenUsercode: bookedSlot.studenUsercode,
-                    StudentDetails: studentDetails,
                     tutorUsercode: bookedSlot.tutorUsercode,
-                    tutorDetails: tutorDetails,
                     sessionId: bookedSlot.sessionId,
                     sessionMaterial: bookedSlot.sessionMaterial,
-                    sessionBookingDetails: sessionDetails,
+                    sessionBookingDetails: bookedSlot.sessionBookingDetails,
                     sessionDetails: bookedSlot.sessionDetails,
                     Bookedby: bookedSlot.Bookedby,
                     bookedAt: bookedSlot.createdAt,
@@ -119,14 +183,52 @@ export const GetBookedSlotsByStudentService = async (body) => {
                     studentName: studentDetails.name,
                     studentEmail: studentDetails.email,
                     tutorName: tutorDetails.name,
-                    tutorEmail: tutorDetails.email
+                    tutorEmail: tutorDetails.email,
+                    StudentDetails: studentDetails,
+                    tutorDetails: tutorDetails,
                 };
 
                 return resultData;
             })
         );
 
-        return resultDataArray; // Return the array with all the results
+        return resultDataArray; 
     }
+    return []
+
+}
+
+
+export const GetSlotsByService = async (body) => {
+
+
+    const getSlots = await getSlotsForBooking(body.subject)
+    if (getSlots.length > 0) {
+        let userCodesList = []
+        getSlots.map((tutor) => {
+            userCodesList.push(tutor.userCode)
+        })
+
+        let slots = await getSlotsfromDb(userCodesList)
+
+        slots = await Promise.all(
+            slots?.map(async (slot) => {
+                const tutor = await getSlots.find(t => t.userCode === slot.userCode);
+             
+                if (tutor) {
+                    return {
+                        slotId: slot._id,
+                        slotDatails: slot,
+                        tutorDetails: tutor
+                    }
+                }
+
+            })
+        );
+
+        return slots;
+    }
+    return []
+
 
 }

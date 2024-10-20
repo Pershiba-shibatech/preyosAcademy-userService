@@ -12,7 +12,7 @@ export const uploadFile = async (filePath, sessionId, studenUsercode) => {
         });
 
         // After the file is uploaded, you can store the result in the database or return it
-       // console.log('File uploaded to Cloudinary:', result);
+     
         const formatArray = result.public_id.split('.')
         // Return the uploaded file's URL or any other relevant info
         return {

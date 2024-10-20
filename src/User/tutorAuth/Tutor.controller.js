@@ -11,7 +11,7 @@ export const createTutorController = async (req, res) => {
         })
 
     }).catch((error) => {
-        console.log(error.message)
+     
         res.send({
             statusCode: 500,
             message: error.message,

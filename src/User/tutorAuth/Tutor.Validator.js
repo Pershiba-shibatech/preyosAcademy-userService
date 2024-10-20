@@ -15,11 +15,11 @@ export const createtutorvalidator = async (data) => {
         "timeZone",
         "userType",
         "Coordinator",
-        "Dob","Qualification"
+        "Dob","Qualification","Slots"
     ];
     const providedKeys = Object.keys(data);
 
-    if (providedKeys.length < 16) {
+    if (providedKeys.length < 17) {
         throw new Error(`Few Keys are missing / extra keys in response body`);
     }
 

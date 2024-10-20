@@ -84,7 +84,19 @@ const BookedSlotsSchema = new mongoose.Schema({
             required: true,
             type: String,
         },
+        date: {
+            required: true,
+            type: String,
+        },
+        day: {
+            required: true,
+            type: String,
+        },
         to: {
+            required: true,
+            type: String,
+        },
+        timeStamp:{
             required: true,
             type: String,
         },
@@ -94,8 +106,6 @@ const BookedSlotsSchema = new mongoose.Schema({
         }
 
     }
-
-
 }, {
     timestamps: true,
 })
