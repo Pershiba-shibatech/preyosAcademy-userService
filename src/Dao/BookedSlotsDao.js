@@ -1,5 +1,5 @@
 import BookedSlots from '../models/BookedSlots.js'
-import tutorInfo from '../models/TutorInfo.js'
+import TutorInfo from '../models/TutorInfo.js'
 import TutorSlots from '../models/TutorSlots.js'
 
 export const GetBookedSlotsofStudentDao = async (data) => {
@@ -43,7 +43,7 @@ export const updateSlotDetails = async (Id, data) => {
 
 
 export const getSlotsForBooking = async (subject) => {
-    const getTutor = await tutorInfo.find({ subjects: { $regex: new RegExp(`^${subject}$`, 'i') } },{_id:0,__v:0})
+    const getTutor = await TutorInfo.find({ subjects: { $regex: new RegExp(`^${subject}$`, 'i') } },{_id:0,__v:0})
 
     return getTutor
 
@@ -55,7 +55,7 @@ export const getSlotsfromDb = async (userCodes) => {
     return slotList
 }
 // export const getSlotsForBooking = async (subject) => {
-//     const slotsWithTutors = await tutorInfo.aggregate([
+//     const slotsWithTutors = await TutorInfo.aggregate([
 //         // Match tutors who have the specific subject
 //         {
 //             $match: { subjects: subject }
@@ -65,7 +65,7 @@ export const getSlotsfromDb = async (userCodes) => {
 //         {
 //             $lookup: {
 //                 from: 'tutorSlots',         // Ensure collection name is correct
-//                 localField: 'userCode',     // Field in tutorInfo
+//                 localField: 'userCode',     // Field in TutorInfo
 //                 foreignField: 'userCode',   // Field in tutorsSlot
 //                 as: 'slotDetails'           // The output field to store the matched slots
 //             }
@@ -74,7 +74,7 @@ export const getSlotsfromDb = async (userCodes) => {
 //         // Project to include both tutor and slot details
 //         {
 //             $project: {
-//                 tutorDetails: '$$ROOT',    // Include all fields from the tutorInfo (tutor details)
+//                 tutorDetails: '$$ROOT',    // Include all fields from the TutorInfo (tutor details)
 //                 slotDetails: 1             // Include the slotDetails (all fields)
 //             }
 //         }
