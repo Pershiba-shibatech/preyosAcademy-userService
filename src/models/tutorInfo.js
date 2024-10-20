@@ -135,5 +135,5 @@ const tutorInfoSchema = new mongoose.Schema(
     }
 );
 
-const tutorInfo = mongoose.model("tutorInfo", tutorInfoSchema);
-export default tutorInfo;
+const TutorInfo = mongoose.model("tutorInfo", tutorInfoSchema);
+export default TutorInfo;
