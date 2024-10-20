@@ -1,6 +1,6 @@
 import express from 'express'
 import { AddTutorSlotsByAdminController, createTutorController, getTutorsList } from './tutorAuth/Tutor.controller.js';
-import { loginController } from './Login-Logout/loginLogout.controllers.js';
+import { loginController } from './Login-Logout/LoginLogout.controllers.js';
 import { createStudentController, getAvailableSlotsForStudentController, getStudentsList } from './StudentAuth/Student.controller.js';
 import { fileuploadMiddleware } from '../Middleware/uploadMiddleWare.js';
 import { BookSlotsbyV1Controller, BookSlotsbyTutorController, GetBookedSlotsController, GetSlotsController } from './BookSlots/BookSlots.controllers.js';
