@@ -26,18 +26,19 @@ app.use(Routes)
 app.get('/', (req, res) => {
     res.send('Hello from Vercel');
 });
-app.listen(PORT, () => {
+
+const server = app.listen(PORT, () => {
     mongoose.connect(mongoString);
     const database = mongoose.connection
     database.once('connected', () => {
         console.log('Database Connected');
     })
-  
+
     // cloudinary.config({
     //     cloud_name: CLOUDINARY_CLOUD_NAME,
     //     api_key: CLOUDINARY_API_KEY,
     //     api_secret: CLOUDINARY_API_SECRET
-        
+
     // });
 
     database.on('error', (error) => {
@@ -45,7 +46,9 @@ app.listen(PORT, () => {
     })
     console.log(`Server Started at ${PORT}`)
 })
-
+server.setTimeout(300000, () => {
+    console.log('Request timed out');
+});
 // export {
 //     cloudinary
 // }
