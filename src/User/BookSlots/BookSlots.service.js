@@ -2,7 +2,7 @@ import { BookaSlotByStudent, GetBookedSlotsofStudentDao, getSlotsForBooking, get
 import { fetchSingleStudentDetails } from "../../Dao/StudentDao.js";
 import { fetchSingleuser } from "../../Dao/TutorDao.js";
 import { getSessionDetails, updateBookedStatus, updateSlotBooked } from "../../Dao/Tutorslots.js";
-import { uploadFile } from "./BookSlots.Validator.js";
+// import { uploadFile } from "./BookSlots.Validator.js";
 import mongoose from 'mongoose';
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -17,7 +17,7 @@ export const BookSlotsByStudentService = async (body, file) => {
             throw new Error('No files uploaded or invalid file path.');
         }
 
-        fileUploadData = await uploadFile(filepath, sessionId, body.studenUsercode)
+   //     fileUploadData = await uploadFile(filepath, sessionId, body.studenUsercode)
 
     }
 
