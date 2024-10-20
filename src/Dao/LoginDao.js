@@ -11,7 +11,7 @@ export const LoginDao = async (email, type) => {
         }
     } else {
         let StudentDetails = await StudentInfo.findOne({ email: email }, { _id: 0, __v: 0 }).lean()
-        if (StudentDetails){
+        if (StudentDetails) {
             return StudentDetails
         }
     }
