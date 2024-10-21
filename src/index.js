@@ -39,7 +39,30 @@ app.get('/test', (req, res) => {
     // })
     res.send('Hello from Vercel');
 });
+app.get('/ping-db', async (req, res) => {
+    try {
+        // Create a new MongoClient
+        const client = new MongoClient(mongoString, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
 
+        // Connect the client to the server
+        await client.connect();
+
+        // Ping the database to confirm a successful connection
+        await client.db("admin").command({ ping: 1 });
+
+        // Send a success response if ping is successful
+        res.status(200).json({ message: 'Ping to MongoDB was successful!' });
+
+        // Close the connection
+        await client.close();
+    } catch (error) {
+        // Handle connection errors
+        res.status(500).json({ message: 'Failed to ping MongoDB', error: error.message });
+    }
+});
 
 app.listen(PORT, () => {
     mongoose.connect(mongoString, {
