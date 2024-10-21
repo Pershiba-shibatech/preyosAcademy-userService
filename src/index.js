@@ -19,10 +19,15 @@ const mongoString = process.env.MONGOURI;
 
 
 const app = express()
-app.use(cors());
+// app.use(cors());
+app.use(cors({
+    origin: '*',  
+    methods: 'GET,POST,PUT,DELETE',
+    credentials: true
+}));
 app.use(express.json());
 
-app.use('/', Routes)
+app.use(Routes)
 app.get('/test', (req, res) => {
     // mongoose.connect(mongoString, {
     //     serverSelectionTimeoutMS: 30000
@@ -30,7 +35,7 @@ app.get('/test', (req, res) => {
     // const database = mongoose.connection
     // database.once('connected', () => {
     //     console.log('Database Connected');
-       
+
     // })
     res.send('Hello from Vercel');
 });
