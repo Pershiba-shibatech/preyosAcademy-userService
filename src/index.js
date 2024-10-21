@@ -21,7 +21,7 @@ const mongoString = process.env.MONGOURI;
 const app = express()
 // app.use(cors());
 app.use(cors({
-    origin: '*',  
+    origin: '*',
     methods: 'GET,POST,PUT,DELETE',
     credentials: true
 }));
@@ -42,22 +42,36 @@ app.get('/test', (req, res) => {
 app.get('/ping-db', async (req, res) => {
     try {
         // Create a new MongoClient
-        const client = new MongoClient(mongoString, {
+        // const client = new MongoClient(mongoString, {
+        //     useNewUrlParser: true,
+        //     useUnifiedTopology: true,
+        // });
+        mongoose.connect(mongoString, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
+            serverSelectionTimeoutMS: 30000 // Adjust this value as needed
         });
 
         // Connect the client to the server
-        await client.connect();
 
+        const adminDb = mongoose.connection.db.admin();
+
+        // Ping the database
+        const result = await adminDb.ping();
+        console.log(result, "result")
         // Ping the database to confirm a successful connection
-        await client.db("admin").command({ ping: 1 });
+        // await client("admin").command({ ping: 1 });
 
         // Send a success response if ping is successful
-        res.status(200).json({ message: 'Ping to MongoDB was successful!' });
+        if (result.ok === 1) {
+            res.status(200).json({ message: 'Ping to MongoDB was successful!' });
+        } else {
+            res.status(500).json({ message: 'Failed to ping MongoDB in 200', result });
 
-        // Close the connection
-        await client.close();
+        }
+
+
+
     } catch (error) {
         // Handle connection errors
         res.status(500).json({ message: 'Failed to ping MongoDB', error: error.message });
