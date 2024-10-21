@@ -22,17 +22,17 @@ const app = express()
 app.use(cors());
 app.use(express.json());
 
-app.use(Routes)
+app.use('/', Routes)
 app.get('/test', (req, res) => {
-    mongoose.connect(mongoString, {
-        serverSelectionTimeoutMS: 30000 
-    });
-    const database = mongoose.connection
-    database.once('connected', () => {
-        console.log('Database Connected');
-        res.send('Hello from Vercel');
-    })
-
+    // mongoose.connect(mongoString, {
+    //     serverSelectionTimeoutMS: 30000
+    // });
+    // const database = mongoose.connection
+    // database.once('connected', () => {
+    //     console.log('Database Connected');
+       
+    // })
+    res.send('Hello from Vercel');
 });
 
 
