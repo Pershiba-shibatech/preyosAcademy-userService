@@ -24,8 +24,17 @@ app.use(express.json());
 
 app.use(Routes)
 app.get('/', (req, res) => {
-    res.send('Hello from Vercel');
+    mongoose.connect(mongoString, {
+        serverSelectionTimeoutMS: 30000 // Adjust this value as needed
+    });
+    const database = mongoose.connection
+    database.once('connected', () => {
+        console.log('Database Connected');
+        res.send('Hello from Vercel');
+    })
+  
 });
+
 
 app.listen(PORT, () => {
     mongoose.connect(mongoString, {
