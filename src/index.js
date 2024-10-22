@@ -28,60 +28,14 @@ app.use(cors({
 app.use(express.json());
 
 app.use(Routes)
-app.get('/test', (req, res) => {
-    // mongoose.connect(mongoString, {
-    //     serverSelectionTimeoutMS: 30000
-    // });
-    // const database = mongoose.connection
-    // database.once('connected', () => {
-    //     console.log('Database Connected');
-
-    // })
+app.get('/', (req, res) => {
+  
     res.send('Hello from Vercel');
 });
-app.get('/ping-db', async (req, res) => {
-    try {
-        // Create a new MongoClient
-        // const client = new MongoClient(mongoString, {
-        //     useNewUrlParser: true,
-        //     useUnifiedTopology: true,
-        // });
-        mongoose.connect(mongoString, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            serverSelectionTimeoutMS: 30000 // Adjust this value as needed
-        });
 
-        // Connect the client to the server
-
-        const adminDb = mongoose.connection.db.admin();
-
-        // Ping the database
-        const result = await adminDb.ping();
-        console.log(result, "result")
-        // Ping the database to confirm a successful connection
-        // await client("admin").command({ ping: 1 });
-
-        // Send a success response if ping is successful
-        if (result.ok === 1) {
-            res.status(200).json({ message: 'Ping to MongoDB was successful!' });
-        } else {
-            res.status(500).json({ message: 'Failed to ping MongoDB in 200', result });
-
-        }
-
-
-
-    } catch (error) {
-        // Handle connection errors
-        res.status(500).json({ message: 'Failed to ping MongoDB', error: error.message });
-    }
-});
 
 app.listen(PORT, () => {
-    mongoose.connect(mongoString, {
-        serverSelectionTimeoutMS: 30000 // Adjust this value as needed
-    });
+    mongoose.connect(mongoString);
     const database = mongoose.connection
     database.once('connected', () => {
         console.log('Database Connected');
