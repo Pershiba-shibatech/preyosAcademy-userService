@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors'
 
 // import { v2 as cloudinary } from 'cloudinary'
-import { Routes } from './User/routes.js'
+import { Routes } from './src/User/routes.js'
 
 dotenv.config()
 const PORT = "4000"
