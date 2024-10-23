@@ -24,7 +24,7 @@ export const AddSlotsDao = async (data) => {
 
 export const fetchSingleuser = async (userCode) => {
     const tutorDetails = await TutorInfo.findOne({ userCode: userCode }, { firstName: 1, lastName: 1, userCode: 1, 
-        tutorName: 1, subjects: 1, email: 1, phoneNumber: 1, experince:1,timeZone:1,
+        tutorName: 1, subjects: 1, email: 1, phoneNumber: 1, experince:1,timeZone:1,userType:1,
          _id: 0})
     if (tutorDetails) {
         return tutorDetails

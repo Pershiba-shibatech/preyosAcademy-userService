@@ -1,4 +1,5 @@
 import { BookaSlotByStudent, GetBookedSlotsofStudentDao, getSlotsForBooking, getSlotsfromDb, updateSlotDetails } from "../../Dao/BookedSlotsDao.js";
+import { AddMaterialDao } from "../../Dao/Library.js";
 import { fetchSingleStudentDetails } from "../../Dao/StudentDao.js";
 import { fetchSingleuser } from "../../Dao/TutorDao.js";
 import { getSessionDetails, updateBookedStatus, updateSlotBooked } from "../../Dao/Tutorslots.js";
@@ -7,7 +8,7 @@ import mongoose from 'mongoose';
 const ObjectId = mongoose.Types.ObjectId;
 
 export const BookSlotsByStudentService = async (body, file) => {
-  
+
     const sessionId = new ObjectId();
     let fileUploadData
     if (file.hasOwnProperty('sessionMaterial')) {
@@ -17,7 +18,7 @@ export const BookSlotsByStudentService = async (body, file) => {
             throw new Error('No files uploaded or invalid file path.');
         }
 
-   //     fileUploadData = await uploadFile(filepath, sessionId, body.studenUsercode)
+        //     fileUploadData = await uploadFile(filepath, sessionId, body.studenUsercode)
 
     }
 
@@ -83,7 +84,7 @@ export const BookSlotsByStudentService = async (body, file) => {
 
 
 export const BookSlotsByTutor = async (body) => {
-   
+
     let SessionDBDetails = body.sessionBookingDetails.map((item) => {
         return {
             studenUsercode: body.studenUsercode,
@@ -103,17 +104,26 @@ export const BookSlotsByTutor = async (body) => {
             sessionBookingDetails: item
         }
     })
-
+    const Material = {
+        studenUsercode: body.studenUsercode,
+        sessionMaterial: body.sessionMaterial,
+        tutorUsercode: body.tutorUsercode,
+        sessionDetails: body.sessionDetails,
+        sessionSubject: body.sessionSubject
+    }
     const checkSlotExist = await getSessionDetails(body.sessionDetails)
-    
-    if (checkSlotExist) {
-        let SessionCreated = await BookaSlotByStudent(SessionDBDetails)
 
+    if (checkSlotExist) {
+
+        // let SessionCreated = await BookaSlotByStudent(SessionDBDetails)
+        // let AddMaterialToLibrary = await AddMaterialDao(Material)
+        let [SessionCreated, AddMaterialToLibrary] = await Promise.all([
+            BookaSlotByStudent(SessionDBDetails),
+            AddMaterialDao(Material)
+        ]);
         SessionCreated = await Promise.all(
             SessionCreated?.map(async (slot) => {
-
                 const sessionDetails = await updateSlotBooked(slot.tutorUsercode, slot.sessionDetails, body.AllDate);
-
                 return {
                     sessionId: slot.sessionId,
                     studenUsercode: slot.studenUsercode,
@@ -153,16 +163,16 @@ export const GetBookedSlotsService = async (body) => {
     if (bookedSlots.length > 0) {
 
         const studentDetails = await fetchSingleStudentDetails(bookedSlots[0].studenUsercode);
-      
+
         const resultDataArray = await Promise.all(
             bookedSlots.map(async (bookedSlot) => {
 
                 const tutorDetails = await fetchSingleuser(bookedSlot.tutorUsercode);
-              
-               
+
+
                 //const sessionDetails = await getSessionDetails(bookedSlot.sessionDetails, bookedSlot.sessionBookingDetails);
 
-               
+
                 const resultData = {
                     studenUsercode: bookedSlot.studenUsercode,
                     tutorUsercode: bookedSlot.tutorUsercode,
@@ -192,7 +202,7 @@ export const GetBookedSlotsService = async (body) => {
             })
         );
 
-        return resultDataArray; 
+        return resultDataArray;
     }
     return []
 
@@ -214,7 +224,7 @@ export const GetSlotsByService = async (body) => {
         slots = await Promise.all(
             slots?.map(async (slot) => {
                 const tutor = await getSlots.find(t => t.userCode === slot.userCode);
-             
+
                 if (tutor) {
                     return {
                         slotId: slot._id,
