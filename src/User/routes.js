@@ -3,7 +3,7 @@ import { AddTutorSlotsByAdminController, createTutorController, getTutorsList } 
 import { loginController } from './Login-Logout/LoginLogout.controllers.js';
 import { createStudentController, getAvailableSlotsForStudentController, getStudentsList } from './StudentAuth/Student.controller.js';
 import { fileuploadMiddleware } from '../Middleware/uploadMiddleWare.js';
-import { BookSlotsbyV1Controller, BookSlotsbyTutorController, GetBookedSlotsController, GetSlotsController } from './BookSlots/BookSlots.controllers.js';
+import { BookSlotsbyV1Controller, BookSlotsbyTutorController, GetBookedSlotsController, GetSlotsController, GetSinglesessionDetails, updateSlotStatus, GetBookedpastSlotsController } from './BookSlots/BookSlots.controllers.js';
 import { getStudentLibraryController, getTutorLibraryController } from './Library/Library.controllers.js';
 
 
@@ -24,7 +24,9 @@ Routes.post('/v1/bookSlot', fileuploadMiddleware, BookSlotsbyV1Controller)
 Routes.post('/bookSlot', BookSlotsbyTutorController)
 Routes.post('/getAvailableSlots', GetSlotsController)
 Routes.post('/fetchBookedSlots', GetBookedSlotsController)
-
+Routes.post('/fetchBookedPastSlots', GetBookedpastSlotsController)
+Routes.get('/fetchSingleSession', GetSinglesessionDetails)
+Routes.post('/updateStatus', updateSlotStatus)
 
 Routes.post('/getTutorsMaterials', getTutorLibraryController)
 Routes.post('/getStudentsMaterials', getStudentLibraryController)

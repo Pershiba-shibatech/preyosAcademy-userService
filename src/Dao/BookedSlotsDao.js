@@ -3,21 +3,50 @@ import TutorInfo from '../models/TutorInfo.js'
 import TutorSlots from '../models/TutorSlots.js'
 
 export const GetBookedSlotsofStudentDao = async (data) => {
-    let searchQuery 
-    if (data.type === "Student"){
-        searchQuery={
-            studenUsercode: data.studenUsercode
+    let searchQuery
+    if (data.type === "Student") {
+        searchQuery = {
+            studenUsercode: data.studenUsercode,
+            sessionStatus: "Yettojoin"
         }
     }
 
-    if(data.type === "Tutor"){
+    if (data.type === "Tutor") {
         searchQuery = {
-            tutorUsercode: data.tutorUsercode
+            tutorUsercode: data.tutorUsercode,
+            sessionStatus: "Yettojoin"
         }
     }
-    if (data.type === "Admin"){
+    if (data.type === "Admin") {
         searchQuery = {
-           
+
+            sessionStatus: "Yettojoin"
+        }
+    }
+    const StudentBookedSlots = await BookedSlots.find(searchQuery)
+    return StudentBookedSlots
+
+}
+export const GetPastSlots = async (data) => {
+    let searchQuery
+    if (data.type === "Student") {
+        searchQuery = {
+            studenUsercode: data.studenUsercode,
+            sessionStatus: { $ne: "Yettojoin" }
+
+        }
+    }
+
+    if (data.type === "Tutor") {
+        searchQuery = {
+            tutorUsercode: data.tutorUsercode,
+            sessionStatus: { $ne: "Yettojoin" }
+        }
+    }
+    if (data.type === "Admin") {
+        searchQuery = {
+
+            sessionStatus: { $ne: "Yettojoin" }
         }
     }
     const StudentBookedSlots = await BookedSlots.find(searchQuery)
@@ -33,6 +62,14 @@ export const BookaSlotByStudent = async (data) => {
         return bookSlot
     }
 }
+export const BookaSlotForReschedule = async (data) => {
+
+    const bookSlot = await BookedSlots.create(data)
+    if (bookSlot) {
+
+        return bookSlot
+    }
+}
 
 export const updateSlotDetails = async (Id, data) => {
     const updatedSlot = await BookedSlots.findOneAndUpdate({ sessionId: Id }, data, { upsert: true, new: true })
@@ -43,16 +80,38 @@ export const updateSlotDetails = async (Id, data) => {
 
 
 export const getSlotsForBooking = async (subject) => {
-    const getTutor = await TutorInfo.find({ subjects: { $regex: new RegExp(`^${subject}$`, 'i') } },{_id:0,__v:0})
+    const getTutor = await TutorInfo.find({ subjects: { $regex: new RegExp(`^${subject}$`, 'i') } }, { _id: 0, __v: 0 })
 
     return getTutor
 
 
 }
 
-export const getSlotsfromDb = async (userCodes) => {
-    let slotList = await TutorSlots.find({ userCode: { $in: userCodes }, isAvailable: true, isBooked: false }, { __v: 0 });
+export const getSlotsfromDb = async (userCodes, month) => {
+   
+    // Construct the query
+    let slotList = await TutorSlots.find({
+        userCode: { $in: userCodes },
+        // isAvailable: true,
+        // isBooked: false,
+        [`availableMonth.${month}`]: '0'
+    }, { __v: 0 });
+
+   
     return slotList
+}
+
+
+export const getParticularSession = async (sessionId) => {
+  
+    let slotList = await BookedSlots.findOne({ sessionId: sessionId })
+    return slotList
+
+}
+
+export const updateStatusDao = async (sessionId, data) => {
+    const slotDetails = await BookedSlots.findOneAndUpdate({ sessionId: sessionId }, data, { new: true });
+    return slotDetails
 }
 // export const getSlotsForBooking = async (subject) => {
 //     const slotsWithTutors = await TutorInfo.aggregate([

@@ -2,8 +2,8 @@ import TutorSlots from "../models/TutorSlots.js"
 
 
 export const getSessionDetails = async (data) => {
- 
-    const sessionDetail = await TutorSlots.findOne({ _id: data },{__v:0})
+
+    const sessionDetail = await TutorSlots.findOne({ _id: data }, { __v: 0 })
     return sessionDetail
     // const result = await getDayWithId(sessionDetail, sessionBookingDetails.id);
 
@@ -37,7 +37,7 @@ export const getDayWithId = async (data, id) => {
 
         // If found, return the entire day's array
         if (slot) {
-            
+
             return { fullArray: data[day], slotData: slot };
         }
     }
@@ -45,8 +45,34 @@ export const getDayWithId = async (data, id) => {
 }
 
 
-export const updateSlotBooked = async(userCode,sessionId,date)=>{
-    let updateSlot = await TutorSlots.findOneAndUpdate({ userCode, _id: sessionId }, { $set: { isBooked: true, isAvailable: false, bookedData: date } })
+export const updateSlotBooked = async (userCode, sessionId, date, month) => {
+    let updateSlot = await TutorSlots.findOneAndUpdate({ userCode, _id: sessionId }, {
+        $set: { isBooked: true, isAvailable: false, bookedData: date, [`availableMonth.${month}`]: '1' },
+        $addToSet: { addSlots: month }
+    })
+    return updateSlot;
+}
+export const updateSlotForStatusBooked = async (sessionId, date, month) => {
+   
+    let setData =
+        { isBooked: true, isAvailable: false, bookedData: date }
+
+    if (date.length === 0) {
+        setData = { isBooked: true, isAvailable: false, bookedData: date, [`availableMonth.${month}`]: '1' }
+    }
+    //getbookedSession.sessionBookingDetails.id
+    let updateSlot
+    if (date.length !== 0) {
+        updateSlot = await TutorSlots.findOneAndUpdate({ _id: sessionId }, {
+            $set:
+                setData
+        })
+    } else {
+        updateSlot = await TutorSlots.findOneAndUpdate({ _id: sessionId }, {
+            $set: setData, $pull: { addSlots: month }
+        })
+    }
+
     return updateSlot;
 }
 
@@ -61,26 +87,26 @@ export const updateBookedStatus = async (userCode, from, slotId) => {
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     let dayFound = null;
 
-   
+
     for await (let day of days) {
         const dayArray = tutorSlot[day];
         if (dayArray && dayArray.length > 0) {
-         
+
             const slotIndex = dayArray.findIndex(slot => slot._id.toString() === slotId);
-           
+
             if (slotIndex !== -1) {
-               
+
                 tutorSlot[day][slotIndex].isBooked = true;
                 tutorSlot[day][slotIndex].bookedData ? tutorSlot[day][slotIndex].bookedData.push(from) : [from]
                 dayFound = day;
-            
+
                 break;
             }
         }
     }
 
     if (dayFound) {
-      
+
         const tutorSlotData = await TutorSlots.findOneAndUpdate({ userCode }, tutorSlot, { new: true });
         return tutorSlotData
     }

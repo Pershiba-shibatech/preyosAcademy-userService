@@ -45,7 +45,9 @@ export const createTutorService = async (body) => {
                     to: slot.To,
                     isAvailable: true,
                     isBooked: false,
-                    bookedData: []
+                    bookedData: [],
+                    addSlots: [],
+                    isTemp: false
                 }
             })
           
@@ -60,7 +62,9 @@ export const createTutorService = async (body) => {
                     to: slot.To,
                     isAvailable: true,
                     isBooked: false,
-                    bookedData: []
+                    bookedData: [],
+                    addSlots: [],
+                    isTemp: false
                 }
             })
            
@@ -75,7 +79,9 @@ export const createTutorService = async (body) => {
                     to: slot.To,
                     isAvailable: true,
                     isBooked: false,
-                    bookedData: []
+                    bookedData: [],
+                    addSlots: [],
+                    isTemp: false
                 }
             })
             
@@ -90,7 +96,9 @@ export const createTutorService = async (body) => {
                     to: slot.To,
                     isAvailable: true,
                     isBooked: false,
-                    bookedData: []
+                    bookedData: [],
+                    addSlots: [],
+                    isTemp: false
                 }
             })
            
@@ -105,7 +113,9 @@ export const createTutorService = async (body) => {
                     to: slot.To,
                     isAvailable: true,
                     isBooked: false,
-                    bookedData: []
+                    bookedData: [],
+                    addSlots: [],
+                    isTemp: false
                 }
             })
            
@@ -120,7 +130,9 @@ export const createTutorService = async (body) => {
                     to: slot.To,
                     isAvailable: true,
                     isBooked: false,
-                    bookedData: []
+                    bookedData: [],
+                    addSlots: [],
+                    isTemp: false
                 }
             })
          
@@ -135,7 +147,9 @@ export const createTutorService = async (body) => {
                     to: slot.To,
                     isAvailable: true,
                     isBooked: false,
-                    bookedData: []
+                    bookedData: [],
+                    addSlots: [],
+                    isTemp: false
                 }
             })
           
