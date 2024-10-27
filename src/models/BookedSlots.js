@@ -28,7 +28,7 @@ const BookedSlotsSchema = new mongoose.Schema({
             trim: true,
         }
     },
-   tutorUsercode: {
+    tutorUsercode: {
         required: true,
         type: String,
         trim: true,
@@ -58,6 +58,12 @@ const BookedSlotsSchema = new mongoose.Schema({
         type: String,
         trim: true,
     },
+    sessionBoardLink: {
+        required: true,
+        type: String,
+        trim: true,
+    },
+
     sessionStatus: {
         required: true,
         type: String,
@@ -79,6 +85,7 @@ const BookedSlotsSchema = new mongoose.Schema({
         type: String,
         trim: true,
     },
+
     sessionBookingDetails: {
         from: {
             required: true,
@@ -96,7 +103,7 @@ const BookedSlotsSchema = new mongoose.Schema({
             required: true,
             type: String,
         },
-        timeStamp:{
+        timeStamp: {
             required: true,
             type: String,
         },
@@ -105,7 +112,32 @@ const BookedSlotsSchema = new mongoose.Schema({
             type: String,
         }
 
+    },
+    cancelledBy: {
+        required: false,
+        type: String,
+        default: ""
+    },
+    rescheduledBy: {
+        required: false,
+        type: String,
+        default: ""
+    },
+    cancelReason: {
+        required: false,
+        type: String,
+        default: ""
+    },
+    rescheduleReason: {
+        required: false,
+        type: String,
+        default: ""
+    },month:{
+        required:true,
+        type: String,
+        default: ""
     }
+
 }, {
     timestamps: true,
 })

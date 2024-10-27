@@ -35,7 +35,7 @@ export const getStudentAvailableSlots = async(data)=>{
 
 export const fetchSingleStudentDetails = async (data) => {
     const getStudentDetails = StudentInfo.findOne({ userCode: data }, {
-        firstName: 1, lastName: 1, userCode: 1, mail: 1, phoneNumber: 1, timeZone: 1,
+        firstName: 1, lastName: 1, userCode: 1, mail: 1, phoneNumber: 1, timeZone: 1,email:1,
         grade: 1, studentName: 1, parentName: 1, Requirements: 1, Coordinator: 1, _id: 0
     })
     return getStudentDetails
