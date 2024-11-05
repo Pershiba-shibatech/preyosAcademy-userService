@@ -88,22 +88,22 @@ export const getSlotsForBooking = async (subject) => {
 }
 
 export const getSlotsfromDb = async (userCodes, month) => {
-   
+
     // Construct the query
     let slotList = await TutorSlots.find({
         userCode: { $in: userCodes },
-        // isAvailable: true,
+        isTemp: false,
         // isBooked: false,
         [`availableMonth.${month}`]: '0'
     }, { __v: 0 });
 
-   
+
     return slotList
 }
 
 
 export const getParticularSession = async (sessionId) => {
-  
+
     let slotList = await BookedSlots.findOne({ sessionId: sessionId })
     return slotList
 
