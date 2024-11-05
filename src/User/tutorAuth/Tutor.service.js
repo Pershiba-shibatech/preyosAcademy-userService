@@ -47,10 +47,24 @@ export const createTutorService = async (body) => {
                     isBooked: false,
                     bookedData: [],
                     addSlots: [],
-                    isTemp: false
+                    isTemp: false,
+                    availableMonth: {
+                        Jan: "0",
+                        Feb: "0",
+                        Mar: "0",
+                        Apr: "0",
+                        May: "0",
+                        Jun: "0",
+                        Jul: "0",
+                        Aug: "0",
+                        Sep: "0",
+                        Oct: "0",
+                        Nov: "0",
+                        Dec: "0"
+                    }
                 }
             })
-          
+
         }
         if (body.Slots.Tuesday.length > 0) {
 
@@ -64,10 +78,24 @@ export const createTutorService = async (body) => {
                     isBooked: false,
                     bookedData: [],
                     addSlots: [],
-                    isTemp: false
+                    isTemp: false,
+                    availableMonth: {
+                        Jan: "0",
+                        Feb: "0",
+                        Mar: "0",
+                        Apr: "0",
+                        May: "0",
+                        Jun: "0",
+                        Jul: "0",
+                        Aug: "0",
+                        Sep: "0",
+                        Oct: "0",
+                        Nov: "0",
+                        Dec: "0"
+                    }
                 }
             })
-           
+
         }
         if (body.Slots.Wednesday.length > 0) {
 
@@ -81,10 +109,24 @@ export const createTutorService = async (body) => {
                     isBooked: false,
                     bookedData: [],
                     addSlots: [],
-                    isTemp: false
+                    isTemp: false,
+                    availableMonth: {
+                        Jan: "0",
+                        Feb: "0",
+                        Mar: "0",
+                        Apr: "0",
+                        May: "0",
+                        Jun: "0",
+                        Jul: "0",
+                        Aug: "0",
+                        Sep: "0",
+                        Oct: "0",
+                        Nov: "0",
+                        Dec: "0"
+                    }
                 }
             })
-            
+
         }
         if (body.Slots.Thursday.length > 0) {
 
@@ -98,10 +140,24 @@ export const createTutorService = async (body) => {
                     isBooked: false,
                     bookedData: [],
                     addSlots: [],
-                    isTemp: false
+                    isTemp: false,
+                    availableMonth: {
+                        Jan: "0",
+                        Feb: "0",
+                        Mar: "0",
+                        Apr: "0",
+                        May: "0",
+                        Jun: "0",
+                        Jul: "0",
+                        Aug: "0",
+                        Sep: "0",
+                        Oct: "0",
+                        Nov: "0",
+                        Dec: "0"
+                    }
                 }
             })
-           
+
         }
         if (body.Slots.Friday.length > 0) {
 
@@ -115,10 +171,24 @@ export const createTutorService = async (body) => {
                     isBooked: false,
                     bookedData: [],
                     addSlots: [],
-                    isTemp: false
+                    isTemp: false,
+                    availableMonth: {
+                        Jan: "0",
+                        Feb: "0",
+                        Mar: "0",
+                        Apr: "0",
+                        May: "0",
+                        Jun: "0",
+                        Jul: "0",
+                        Aug: "0",
+                        Sep: "0",
+                        Oct: "0",
+                        Nov: "0",
+                        Dec: "0"
+                    }
                 }
             })
-           
+
         }
         if (body.Slots.Saturday.length > 0) {
 
@@ -132,10 +202,24 @@ export const createTutorService = async (body) => {
                     isBooked: false,
                     bookedData: [],
                     addSlots: [],
-                    isTemp: false
+                    isTemp: false,
+                    availableMonth: {
+                        Jan: "0",
+                        Feb: "0",
+                        Mar: "0",
+                        Apr: "0",
+                        May: "0",
+                        Jun: "0",
+                        Jul: "0",
+                        Aug: "0",
+                        Sep: "0",
+                        Oct: "0",
+                        Nov: "0",
+                        Dec: "0"
+                    }
                 }
             })
-         
+
         }
         if (body.Slots.Sunday.length > 0) {
 
@@ -149,10 +233,24 @@ export const createTutorService = async (body) => {
                     isBooked: false,
                     bookedData: [],
                     addSlots: [],
-                    isTemp: false
+                    isTemp: false,
+                    availableMonth: {
+                        Jan: "0",
+                        Feb: "0",
+                        Mar: "0",
+                        Apr: "0",
+                        May: "0",
+                        Jun: "0",
+                        Jul: "0",
+                        Aug: "0",
+                        Sep: "0",
+                        Oct: "0",
+                        Nov: "0",
+                        Dec: "0"
+                    }
                 }
             })
-          
+
         }
 
         let combinedSlots = [...(MondayData || []),
@@ -163,9 +261,9 @@ export const createTutorService = async (body) => {
         ...(SaturdayData || []),
         ...(SundayData || [])];
 
-       
+
         const addSlots = await InserSlotsDao(combinedSlots)
-        if (combinedSlots){
+        if (combinedSlots) {
             let responseData = {
                 userCode: tutorDetails.userCode,
                 firstName: tutorDetails.firstName,
@@ -189,7 +287,7 @@ export const createTutorService = async (body) => {
             }
             return responseData
         }
-     
+
     }
 }
 

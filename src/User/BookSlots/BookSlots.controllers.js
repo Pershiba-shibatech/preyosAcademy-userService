@@ -117,6 +117,7 @@ export const updateSlotStatus = async(req,res)=>{
             result: response
         })
     }).catch((error) => {
+     
         res.send({
             statusCode: 500,
             message: error.message,
