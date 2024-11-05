@@ -119,10 +119,15 @@ export const BookSlotsByTutor = async (body) => {
 
         // let SessionCreated = await BookaSlotByStudent(SessionDBDetails)
         // let AddMaterialToLibrary = await AddMaterialDao(Material)
-        let [SessionCreated, AddMaterialToLibrary] = await Promise.all([
-            BookaSlotByStudent(SessionDBDetails),
-            AddMaterialDao(Material)
-        ]);
+        let AddMaterialToLibrary;
+        if (body.sessionMaterial.url !== "") {
+            AddMaterialToLibrary = await AddMaterialDao(Material)
+        }
+        let SessionCreated = await BookaSlotByStudent(SessionDBDetails)
+        // let [SessionCreated, AddMaterialToLibrary] = await Promise.all([
+        //     BookaSlotByStudent(SessionDBDetails),
+        //     AddMaterialDao(Material)
+        // ]);
         SessionCreated = await Promise.all(
             SessionCreated?.map(async (slot) => {
                 const sessionDetails = await updateSlotBooked(slot.tutorUsercode, slot.sessionDetails, body.AllDate, body.month);
@@ -315,7 +320,7 @@ export const updateSlotService = async (body) => {
     const getTutorSlotDetail = await getSessionDetails(getbookedSession.sessionBookingDetails.id)
     let filteredBookedDate = getTutorSlotDetail.bookedData.filter((slot) => slot !== getbookedSession.sessionBookingDetails.date)
 
-   
+
     if (getbookedSession) {
         if (body.sessionStatus === "completed") {
             let sessionDetails = {
@@ -326,7 +331,7 @@ export const updateSlotService = async (body) => {
                 studentFeedbackByTutor: body.studentFeedbackByTutor
             }
 
-          
+
             const updatedStatus = await updateStatusDao(getbookedSession.sessionId, sessionDetails)
             const updateOldSlotDetail = await updateSlotForStatusBooked(getbookedSession.sessionBookingDetails.id, filteredBookedDate, getbookedSession.month);
 
@@ -367,7 +372,7 @@ export const updateSlotService = async (body) => {
 
             }
             const updatedStatus = await updateStatusDao(getbookedSession.sessionId, sessionDetails)
-        
+
             const addSlots = await addSingleSlot(tempSessionDetails)
 
             if (addSlots) {
@@ -387,7 +392,7 @@ export const updateSlotService = async (body) => {
                     homeworkStatus: "",
                     sessionSummary: "",
                     studentFeedbackByTutor: "",
-                    month:body.month,
+                    month: body.month,
                     sessionBookingDetails: {
                         from: addSlots.from,
                         to: addSlots.to,
@@ -397,7 +402,7 @@ export const updateSlotService = async (body) => {
                         id: addSlots._id,
                     }
                 }
-               
+
                 const updateOldSlotDetail = await updateSlotForStatusBooked(getbookedSession.sessionBookingDetails.id, filteredBookedDate, getbookedSession.month);
 
                 const RescheduleSlot = await BookaSlotForReschedule(bookSlot)
