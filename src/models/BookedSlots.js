@@ -54,12 +54,12 @@ const BookedSlotsSchema = new mongoose.Schema({
         trim: true,
     },
     sessionLink: {
-        required: true,
+        required: false,
         type: String,
         trim: true,
     },
     sessionBoardLink: {
-        required: true,
+        required: false,
         type: String,
         trim: true,
     },

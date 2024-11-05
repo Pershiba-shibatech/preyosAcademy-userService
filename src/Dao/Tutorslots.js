@@ -58,7 +58,7 @@ export const updateSlotForStatusBooked = async (sessionId, date, month) => {
         { isBooked: true, isAvailable: false, bookedData: date }
 
     if (date.length === 0) {
-        setData = { isBooked: true, isAvailable: false, bookedData: date, [`availableMonth.${month}`]: '1' }
+        setData = { isBooked: true, isAvailable: false, bookedData: date, [`availableMonth.${month}`]: '0' }
     }
     //getbookedSession.sessionBookingDetails.id
     let updateSlot
