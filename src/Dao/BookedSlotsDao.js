@@ -113,6 +113,11 @@ export const updateStatusDao = async (sessionId, data) => {
     const slotDetails = await BookedSlots.findOneAndUpdate({ sessionId: sessionId }, data, { new: true });
     return slotDetails
 }
+
+export const updateSessionLink = async (sessionId, data) => {
+    const slotDetails = await BookedSlots.findOneAndUpdate({ sessionId: sessionId }, { $set: { sessionLink: data.sessionLink, sessionBoardLink: data.sessionBoardLink } }, { new: true })
+    return slotDetails
+}
 // export const getSlotsForBooking = async (subject) => {
 //     const slotsWithTutors = await TutorInfo.aggregate([
 //         // Match tutors who have the specific subject

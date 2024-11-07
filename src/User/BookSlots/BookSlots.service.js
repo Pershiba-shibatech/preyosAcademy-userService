@@ -1,4 +1,4 @@
-import { BookaSlotByStudent, BookaSlotForReschedule, GetBookedSlotsofStudentDao, getParticularSession, GetPastSlots, getSlotsForBooking, getSlotsfromDb, updateSlotDetails, updateStatusDao } from "../../Dao/BookedSlotsDao.js";
+import { BookaSlotByStudent, BookaSlotForReschedule, GetBookedSlotsofStudentDao, getParticularSession, GetPastSlots, getSlotsForBooking, getSlotsfromDb, updateSessionLink, updateSlotDetails, updateStatusDao } from "../../Dao/BookedSlotsDao.js";
 import { AddMaterialDao } from "../../Dao/Library.js";
 import { fetchSingleStudentDetails } from "../../Dao/StudentDao.js";
 import { addSingleSlot, fetchSingleuser, InserSlotsDao } from "../../Dao/TutorDao.js";
@@ -441,4 +441,15 @@ export const GetSinglesessionDetailsSerice = async (query) => {
     } else {
         throw Error('unable to fetch session Details')
     }
+}
+
+export const updateSlotLinkService = async (body) => {
+
+    let updateData = {
+        sessionLink: body.sessionLink ?? "",
+        sessionBoardLink: body.sessionBoardLink ?? ''
+    }
+    const updateSession = await updateSessionLink(body.sessionId, updateData)
+    return updateSession
+
 }

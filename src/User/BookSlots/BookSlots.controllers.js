@@ -1,4 +1,4 @@
-import { BookSlotsByStudentService, BookSlotsByTutor, GetBookedSlotsService, GetSlotsByService, updateSlotService, GetSinglesessionDetailsSerice, GetBookedpastSlotsService } from "./BookSlots.service.js"
+import { BookSlotsByStudentService, BookSlotsByTutor, GetBookedSlotsService, GetSlotsByService, updateSlotService, GetSinglesessionDetailsSerice, GetBookedpastSlotsService,  updateSlotLinkService } from "./BookSlots.service.js"
 
 export const BookSlotsbyTutorController = async (req, res) => {
 
@@ -111,6 +111,23 @@ export const GetSlotsController = async (req, res) => {
 
 export const updateSlotStatus = async(req,res)=>{
     await updateSlotService(req.body).then((response) => {
+        res.send({
+            statusCode: 200,
+            message: `Slot status updated  successfully!`,
+            result: response
+        })
+    }).catch((error) => {
+     
+        res.send({
+            statusCode: 500,
+            message: error.message,
+            result: []
+        })
+    })
+}
+
+export const updateSlotsLink = async(req,res)=>{
+    await updateSlotLinkService(req.body).then((response) => {
         res.send({
             statusCode: 200,
             message: `Slot status updated  successfully!`,
