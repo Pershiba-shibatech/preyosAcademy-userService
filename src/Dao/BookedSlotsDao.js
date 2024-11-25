@@ -23,7 +23,7 @@ export const GetBookedSlotsofStudentDao = async (data) => {
             sessionStatus: "Yettojoin"
         }
     }
-    const StudentBookedSlots = await BookedSlots.find(searchQuery)
+    const StudentBookedSlots = await BookedSlots.find(searchQuery).sort({ "sessionBookingDetails.timeStamp" :1})
     return StudentBookedSlots
 
 }
