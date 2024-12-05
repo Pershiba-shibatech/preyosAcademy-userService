@@ -23,7 +23,7 @@ export const GetBookedSlotsofStudentDao = async (data) => {
             sessionStatus: "Yettojoin"
         }
     }
-    const StudentBookedSlots = await BookedSlots.find(searchQuery).sort({ "sessionBookingDetails.timeStamp" :1})
+    const StudentBookedSlots = await BookedSlots.find(searchQuery).sort({ "sessionBookingDetails.timeStamp": 1 })
     return StudentBookedSlots
 
 }
@@ -117,6 +117,27 @@ export const updateStatusDao = async (sessionId, data) => {
 export const updateSessionLink = async (sessionId, data) => {
     const slotDetails = await BookedSlots.findOneAndUpdate({ sessionId: sessionId }, { $set: { sessionLink: data.sessionLink, sessionBoardLink: data.sessionBoardLink } }, { new: true })
     return slotDetails
+}
+
+export const getAllSessionForReportDao = async (studenUsercode, subject) => {
+   let query = {}
+    if (studenUsercode !== "" && subject !== "") {
+        query = {
+            studenUsercode, sessionSubject: subject
+        }
+    }
+    if (studenUsercode !== "" && subject === "") {
+        query = {
+            studenUsercode
+        }
+    }
+    if (studenUsercode === "" && subject !== "") {
+        query = {
+            sessionSubject: subject
+        }
+    }
+    const getAllSlotDetails = await BookedSlots.find(query).lean()
+    return getAllSlotDetails
 }
 // export const getSlotsForBooking = async (subject) => {
 //     const slotsWithTutors = await TutorInfo.aggregate([

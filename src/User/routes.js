@@ -5,6 +5,7 @@ import { createStudentController, getAvailableSlotsForStudentController, getStud
 import { fileuploadMiddleware } from '../Middleware/uploadMiddleWare.js';
 import { BookSlotsbyV1Controller, BookSlotsbyTutorController, GetBookedSlotsController, GetSlotsController, GetSinglesessionDetails, updateSlotStatus, GetBookedpastSlotsController, updateSlotsLink } from './BookSlots/BookSlots.controllers.js';
 import { getStudentLibraryController, getTutorLibraryController } from './Library/Library.controllers.js';
+import { getAllSessionForReport } from './Reports/Reports.controller.js';
 
 
 export const Routes = express.Router();
@@ -27,7 +28,8 @@ Routes.post('/fetchBookedSlots', GetBookedSlotsController)
 Routes.post('/fetchBookedPastSlots', GetBookedpastSlotsController)
 Routes.get('/fetchSingleSession', GetSinglesessionDetails)
 Routes.post('/updateStatus', updateSlotStatus)
-Routes.post('/updateSlotLink',updateSlotsLink)
+Routes.post('/updateSlotLink', updateSlotsLink)
 
 Routes.post('/getTutorsMaterials', getTutorLibraryController)
 Routes.post('/getStudentsMaterials', getStudentLibraryController)
+Routes.post('/getAllReport', getAllSessionForReport)
