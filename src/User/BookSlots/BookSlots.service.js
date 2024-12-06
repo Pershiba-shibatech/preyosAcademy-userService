@@ -328,7 +328,8 @@ export const updateSlotService = async (body) => {
                 topic: body.topic,
                 homeworkStatus: body.homeworkStatus,
                 sessionSummary: body.sessionSummary,
-                studentFeedbackByTutor: body.studentFeedbackByTutor
+                studentFeedbackByTutor: body.studentFeedbackByTutor,
+                homeworkFeedback: body.homeworkFeedback
             }
 
 

@@ -76,7 +76,10 @@ const BookedSlotsSchema = new mongoose.Schema({
 
         type: String,
         trim: true,
-    }, sessionSummary: {
+    }, homeworkFeedback: {
+        type: String,
+        trim: true,
+    },  sessionSummary: {
 
         type: String,
         trim: true,
@@ -132,8 +135,8 @@ const BookedSlotsSchema = new mongoose.Schema({
         required: false,
         type: String,
         default: ""
-    },month:{
-        required:true,
+    }, month: {
+        required: true,
         type: String,
         default: ""
     }
