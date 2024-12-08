@@ -1,4 +1,4 @@
-import { createStudentService, GetAllStudentList, getAvailableSlotsForStudent } from "./Student.service.js"
+import { createStudentService, deleteStudentService, GetAllStudentList, getAvailableSlotsForStudent } from "./Student.service.js"
 
 export const createStudentController=async(req, res)=>{
  
@@ -8,6 +8,26 @@ export const createStudentController=async(req, res)=>{
             statusCode: 200,
             message: `Student created Successfully!`,
             result: [response]
+        })
+
+    }).catch((error) => {
+        res.send({
+            statusCode: 500,
+            message: error.message,
+            result: []
+        })
+    })
+
+  
+}
+export const deleteStudentController =async(req, res)=>{
+ 
+    await deleteStudentService(req.body).then((response)=>{
+
+        res.send({
+            statusCode: 200,
+            message: `Student Deleted Successfully!`,
+            result: []
         })
 
     }).catch((error) => {

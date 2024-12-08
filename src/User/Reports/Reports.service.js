@@ -38,7 +38,8 @@ export const getAllSessionForReportServie = async (body) => {
                     tutorEmail: tutorDetails.email,
                     StudentDetails: studentDetails,
                     tutorDetails: tutorDetails,
-                    sessionBoardLink: bookedSlot.sessionBoardLink
+                    sessionBoardLink: bookedSlot.sessionBoardLink,
+                    homeworkFeedback: bookedSlot.homeworkFeedback
                 };
 
                 return resultData;

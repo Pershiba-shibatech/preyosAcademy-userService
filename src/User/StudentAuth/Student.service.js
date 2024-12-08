@@ -1,5 +1,5 @@
 import moment from "moment"
-import { createStudentDao, fetchstudentByEmail, getStudentAvailableSlots, getStudentList } from "../../Dao/StudentDao.js"
+import { createStudentDao, DeleteStudent, fetchstudentByEmail, getStudentAvailableSlots, getStudentList } from "../../Dao/StudentDao.js"
 import { createStudentValidator } from "./Student.Validator.js"
 import { fetchSingleuser } from "../../Dao/TutorDao.js"
 
@@ -28,12 +28,12 @@ export const createStudentService = async (body) => {
         paymentMethod: "Bank Transfer",
         userType: body.userType,
         Coordinator: body.Coordinator,
-        Dob:body.Dob,
+        Dob: body.Dob,
         logInDetails: { lastLogged: "", isLoggedIn: false }
     }
     const checkAvailable = await fetchstudentByEmail(body.email)
-    if(checkAvailable.length>0){
-         throw new Error(`Student already exist with the same email`);
+    if (checkAvailable.length > 0) {
+        throw new Error(`Student already exist with the same email`);
     }
 
     let studentDetails = await createStudentDao(studentData)
@@ -72,10 +72,10 @@ export const getAvailableSlotsForStudent = async (data) => {
         let timestamps
         if (data.day === 0) {
             Day = moment().format('dddd');
-            timestamps=moment().format('x')
+            timestamps = moment().format('x')
         } else {
             Day = moment(data.day).format('dddd')
-      
+
             timestamps = data.day
         }
 
@@ -113,7 +113,7 @@ export const getAvailableSlotsForStudent = async (data) => {
 }
 
 
-export const GetAllStudentList =async()=> {
+export const GetAllStudentList = async () => {
     let studentList = await getStudentList()
     studentList = await Promise.all(studentList.map(async (studentDetails) => {
         // Fetch tutorDetails for each student
@@ -139,10 +139,17 @@ export const GetAllStudentList =async()=> {
             paymentMethod: studentDetails.paymentMethod,
             userType: studentDetails.userType,
             Coordinator: tutorDetails,
-            logInDetails: studentDetails.logInDetails,       
-          
+            logInDetails: studentDetails.logInDetails,
+
         };
-      }));
-     
+    }));
+
     return studentList
-  }
+}
+
+
+export const deleteStudentService = async (body)=>{
+
+   // const [deleteStudent,DeleteBookedSlotes,deleteLibraries] = Promise.all([])
+    const updateDelete = await DeleteStudent(body.userCode)
+}
