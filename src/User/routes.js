@@ -1,7 +1,7 @@
 import express from 'express'
 import { AddTutorSlotsByAdminController, createTutorController, getTutorsList } from './tutorAuth/Tutor.controller.js';
 import { loginController } from './Login-Logout/LoginLogout.controllers.js';
-import { createStudentController, getAvailableSlotsForStudentController, getStudentsList } from './StudentAuth/Student.controller.js';
+import { createStudentController, getAvailableSlotsForStudentController, getStudentsList, deleteStudentController } from './StudentAuth/Student.controller.js';
 import { fileuploadMiddleware } from '../Middleware/uploadMiddleWare.js';
 import { BookSlotsbyV1Controller, BookSlotsbyTutorController, GetBookedSlotsController, GetSlotsController, GetSinglesessionDetails, updateSlotStatus, GetBookedpastSlotsController, updateSlotsLink } from './BookSlots/BookSlots.controllers.js';
 import { getStudentLibraryController, getTutorLibraryController } from './Library/Library.controllers.js';
@@ -19,6 +19,7 @@ Routes.get('/getTutorsList', getTutorsList)
 
 
 Routes.post('/createStudent', createStudentController)
+Routes.post('/deleteStudent',deleteStudentController)
 Routes.get('/getStudentsList', getStudentsList)
 Routes.post('/fetchAvailableSlotsforStudent', getAvailableSlotsForStudentController)
 Routes.post('/v1/bookSlot', fileuploadMiddleware, BookSlotsbyV1Controller)

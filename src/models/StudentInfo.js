@@ -128,13 +128,17 @@ const StudentInfoSchema = new mongoose.Schema(
 
         },
         Coordinator: {
-            required:true,
+            required: true,
             type: String,
             trim: true,
         },
-        Dob:{
+        Dob: {
             type: String,
-          },
+        },
+        isDeleted: {
+            type: Boolean,
+            default: false
+        },
         logInDetails: LogInDetailsSchema,
     },
     {
