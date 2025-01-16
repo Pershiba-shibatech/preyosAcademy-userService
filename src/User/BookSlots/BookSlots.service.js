@@ -167,7 +167,8 @@ export const BookSlotsByTutor = async (body) => {
 
 export const GetBookedSlotsService = async (body) => {
     const bookedSlots = await GetBookedSlotsofStudentDao(body)
-    const currentTimestamp = new Date().getTime();
+    const currentTimestamp = new Date();
+    currentTimestamp.setHours(0, 0, 0, 0);
     if (bookedSlots.length > 0) {
 
 
@@ -211,8 +212,15 @@ export const GetBookedSlotsService = async (body) => {
             })
         );
 
+        // const filteredResultDataArray = resultDataArray.filter((session) => {
+        //     const sessionTimestamp = parseInt(session.sessionBookingDetails.timeStamp, 10); // Parse the session timeStamp
+        //     sessionTimestamp.setHours(0, 0, 0, 0);
+        //     return sessionTimestamp >= currentTimestamp; // Keep sessions that are for today or future dates
+        // });
         const filteredResultDataArray = resultDataArray.filter((session) => {
-            const sessionTimestamp = parseInt(session.sessionBookingDetails.timeStamp, 10); // Parse the session timeStamp
+            const sessionTimestamp = new Date(parseInt(session.sessionBookingDetails.timeStamp, 10)); // Parse the session timeStamp
+            sessionTimestamp.setHours(0, 0, 0, 0); // Normalize the session timestamp to midnight
+
             return sessionTimestamp >= currentTimestamp; // Keep sessions that are for today or future dates
         });
 
