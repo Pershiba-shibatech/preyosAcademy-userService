@@ -100,7 +100,20 @@ export const getSlotsfromDb = async (userCodes, month) => {
 
     return slotList
 }
+export const getSingleSlots = async (userCodes, date, from, to) => {
+    let slotList = await TutorSlots.find({
+        userCode: { $in: userCodes },
+        isTemp: false,
+        // from: from,
+        // to: to,
+        bookedData: { $nin: [date] }
+        // isBooked: false,
+        //[`availableMonth.${month}`]: '0'
+    }, { __v: 0 });
 
+
+    return slotList
+}
 
 export const getParticularSession = async (sessionId) => {
 
@@ -120,7 +133,7 @@ export const updateSessionLink = async (sessionId, data) => {
 }
 
 export const getAllSessionForReportDao = async (studenUsercode, subject) => {
-   let query = {}
+    let query = {}
     if (studenUsercode !== "" && subject !== "") {
         query = {
             studenUsercode, sessionSubject: subject
@@ -167,3 +180,17 @@ export const getAllSessionForReportDao = async (studenUsercode, subject) => {
 
 //     return slotsWithTutors;
 // };
+
+export const checkIsSlotAvailable = async (tutorUsercode, time) => {
+   
+
+    const availableSlot = await BookedSlots.findOne({ tutorUsercode, "sessionBookingDetails.from": time.from, "sessionBookingDetails.to": time.to, "sessionBookingDetails.date": time.date, sessionStatus: "Yettojoin" },
+        { tutorUsercode: 1, sessionBookingDetails: 1, _id: 1, sessionStatus: 1 })
+    
+    return availableSlot;
+
+};
+
+
+
+
