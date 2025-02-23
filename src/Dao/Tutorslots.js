@@ -3,7 +3,7 @@ import TutorSlots from "../models/TutorSlots.js"
 
 export const getSessionDetails = async (data) => {
 
-    const sessionDetail = await TutorSlots.findOne({ _id: data }, { __v: 0 })
+    const sessionDetail = await TutorSlots.findOne({ _id: data }, { __v: 0 }).lean()
     return sessionDetail
     // const result = await getDayWithId(sessionDetail, sessionBookingDetails.id);
 
@@ -48,6 +48,13 @@ export const getDayWithId = async (data, id) => {
 export const updateSlotBooked = async (userCode, sessionId, date, month) => {
     let updateSlot = await TutorSlots.findOneAndUpdate({ userCode, _id: sessionId }, {
         $set: { isBooked: true, isAvailable: false, bookedData: date, [`availableMonth.${month}`]: '1' },
+        $addToSet: { addSlots: month }
+    })
+    return updateSlot;
+}
+export const updateSlotBookedForSingle = async (userCode, sessionId, date, month) => {
+    let updateSlot = await TutorSlots.findOneAndUpdate({ userCode, _id: sessionId }, {
+        $set: { isBooked: true, isAvailable: false, bookedData: date, [`availableMonth.${month}`]: '0' },
         $addToSet: { addSlots: month }
     })
     return updateSlot;

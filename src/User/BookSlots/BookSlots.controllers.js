@@ -1,4 +1,4 @@
-import { BookSlotsByStudentService, BookSlotsByTutor, GetBookedSlotsService, GetSlotsByService, updateSlotService, GetSinglesessionDetailsSerice, GetBookedpastSlotsService,  updateSlotLinkService } from "./BookSlots.service.js"
+import { BookSlotsByStudentService, BookSlotsByTutor, GetBookedSlotsService, GetSlotsByService, updateSlotService, GetSinglesessionDetailsSerice, GetBookedpastSlotsService, updateSlotLinkService, GetSingleSlotsAvailable, getAvailableStatus, BookSingleSlotsByTutor } from "./BookSlots.service.js"
 
 export const BookSlotsbyTutorController = async (req, res) => {
 
@@ -18,13 +18,31 @@ export const BookSlotsbyTutorController = async (req, res) => {
         })
     })
 }
+export const BookSingleSlotsbyTutorController = async (req, res) => {
+
+    await BookSingleSlotsByTutor(req.body, req.files).then((response) => {
+
+        res.send({
+            statusCode: 200,
+            message: `Single Slot booked Successfully!`,
+            result: response
+        })
+
+    }).catch((error) => {
+        res.send({
+            statusCode: 500,
+            message: error.message,
+            result: []
+        })
+    })
+}
 export const BookSlotsbyV1Controller = async (req, res) => {
 
     await BookSlotsByStudentService(req.body, req.files).then((response) => {
 
         res.send({
             statusCode: 200,
-           
+
             message: `Slot booked Successfully!`,
             result: response
         })
@@ -108,16 +126,16 @@ export const GetSlotsController = async (req, res) => {
     })
 }
 
-
-export const updateSlotStatus = async(req,res)=>{
-    await updateSlotService(req.body).then((response) => {
+export const GetSingleSlotsController = async (req, res) => {
+    await GetSingleSlotsAvailable(req.body).then((response) => {
         res.send({
             statusCode: 200,
-            message: `Slot status updated  successfully!`,
+            numberOfSlots: response.length,
+            message: `Available Slot fetched Successfully!`,
             result: response
         })
+
     }).catch((error) => {
-     
         res.send({
             statusCode: 500,
             message: error.message,
@@ -126,7 +144,25 @@ export const updateSlotStatus = async(req,res)=>{
     })
 }
 
-export const updateSlotsLink = async(req,res)=>{
+
+export const updateSlotStatus = async (req, res) => {
+    await updateSlotService(req.body).then((response) => {
+        res.send({
+            statusCode: 200,
+            message: `Slot status updated  successfully!`,
+            result: response
+        })
+    }).catch((error) => {
+
+        res.send({
+            statusCode: 500,
+            message: error.message,
+            result: []
+        })
+    })
+}
+
+export const updateSlotsLink = async (req, res) => {
     await updateSlotLinkService(req.body).then((response) => {
         res.send({
             statusCode: 200,
@@ -134,11 +170,30 @@ export const updateSlotsLink = async(req,res)=>{
             result: response
         })
     }).catch((error) => {
-     
+
         res.send({
             statusCode: 500,
             message: error.message,
             result: []
         })
     })
+}
+
+export const getAvailableStatusController = async (req, res) => {
+
+    await getAvailableStatus(req.body).then((response) => {
+        res.send({
+            statusCode: 200,
+            message: `Slot status fetched  successfully!`,
+            isAvailable: !response ? true : false,
+            result: !response ? [] : [response]
+        })
+    }).catch((error) => {
+        res.send({
+            statusCode: 500,
+            message: error.message,
+            result: []
+        })
+    })
+
 }

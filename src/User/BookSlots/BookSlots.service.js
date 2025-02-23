@@ -1,10 +1,12 @@
-import { BookaSlotByStudent, BookaSlotForReschedule, GetBookedSlotsofStudentDao, getParticularSession, GetPastSlots, getSlotsForBooking, getSlotsfromDb, updateSessionLink, updateSlotDetails, updateStatusDao } from "../../Dao/BookedSlotsDao.js";
+import moment from "moment";
+import { BookaSlotByStudent, BookaSlotForReschedule, checkIsSlotAvailable, GetBookedSlotsofStudentDao, getParticularSession, GetPastSlots, getSingleSlots, getSlotsForBooking, getSlotsfromDb, updateSessionLink, updateSlotDetails, updateStatusDao } from "../../Dao/BookedSlotsDao.js";
 import { AddMaterialDao } from "../../Dao/Library.js";
 import { fetchSingleStudentDetails } from "../../Dao/StudentDao.js";
 import { addSingleSlot, fetchSingleuser, InserSlotsDao } from "../../Dao/TutorDao.js";
-import { getSessionDetails, updateBookedStatus, updateSlotBooked, updateSlotForStatusBooked } from "../../Dao/Tutorslots.js";
+import { getSessionDetails, updateBookedStatus, updateSlotBooked, updateSlotBookedForSingle, updateSlotForStatusBooked } from "../../Dao/Tutorslots.js";
 // import { uploadFile } from "./BookSlots.Validator.js";
 import mongoose from 'mongoose';
+import { getAllDatesInMonth } from "../../ConstantFunctions.js";
 const ObjectId = mongoose.Types.ObjectId;
 
 export const BookSlotsByStudentService = async (body, file) => {
@@ -86,6 +88,7 @@ export const BookSlotsByStudentService = async (body, file) => {
 export const BookSlotsByTutor = async (body) => {
 
     let SessionDBDetails = body.sessionBookingDetails.map((item) => {
+
         return {
             studenUsercode: body.studenUsercode,
             Bookedby: body.Bookedby,
@@ -106,6 +109,21 @@ export const BookSlotsByTutor = async (body) => {
             month: body.month
         }
     })
+   
+    let filteredSessionDetails = await Promise.all(SessionDBDetails.map(async (session) => {
+       
+        const getAvailable = await getAvailableStatus({ tutorUsercode: session.tutorUsercode, time: session.sessionBookingDetails })
+       
+        if (!getAvailable) {
+            return session;
+        } else {
+            return null
+        }
+
+    }));
+    filteredSessionDetails = filteredSessionDetails.filter((session) => session !== null);
+    
+   
     const Material = {
         studenUsercode: body.studenUsercode,
         sessionMaterial: body.sessionMaterial,
@@ -123,7 +141,7 @@ export const BookSlotsByTutor = async (body) => {
         if (body.sessionMaterial.url !== "") {
             AddMaterialToLibrary = await AddMaterialDao(Material)
         }
-        let SessionCreated = await BookaSlotByStudent(SessionDBDetails)
+        let SessionCreated = await BookaSlotByStudent(filteredSessionDetails)
         // let [SessionCreated, AddMaterialToLibrary] = await Promise.all([
         //     BookaSlotByStudent(SessionDBDetails),
         //     AddMaterialDao(Material)
@@ -164,6 +182,125 @@ export const BookSlotsByTutor = async (body) => {
 
 }
 
+export const BookSingleSlotsByTutor = async (body) => {
+   
+    let SessionDBDetails = body.sessionBookingDetails.map((item) => {
+
+        return {
+            studenUsercode: body.studenUsercode,
+            Bookedby: body.Bookedby,
+            tutorUsercode: body.tutorUsercode,
+            sessionMaterial: body.sessionMaterial,
+            sessionId: new ObjectId(),
+            sessionDetails: body.sessionDetails,
+            sessionSubject: body.sessionSubject,
+            paymentStatus: body.paymentStatus,
+            sessionLink: body.sessionLink,
+            sessionBoardLink: body.sessionBoardLink,
+            sessionStatus: body.sessionStatus,
+            topic: "",
+            homeworkStatus: "",
+            sessionSummary: "",
+            studentFeedbackByTutor: "",
+            sessionBookingDetails: item,
+            month: body.month
+        }
+    })
+
+    let filteredSessionDetails = await Promise.all(SessionDBDetails.map(async (session) => {
+      
+        const getAvailable = await getAvailableStatus({ tutorUsercode: session.tutorUsercode, time: session.sessionBookingDetails })
+        if (!getAvailable) {
+            return session;
+        } else {
+            return null
+        }
+
+    }));
+    filteredSessionDetails = filteredSessionDetails.filter((session) => session !== null);
+
+    const Material = {
+        studenUsercode: body.studenUsercode,
+        sessionMaterial: body.sessionMaterial,
+        tutorUsercode: body.tutorUsercode,
+        sessionDetails: body.sessionDetails,
+        sessionSubject: body.sessionSubject
+    }
+    const checkSlotExist = await getSessionDetails(body.sessionDetails)
+   
+    const getAllDate = getAllDatesInMonth(moment().format('YYYY'), body.month, checkSlotExist.day)
+
+
+    if (checkSlotExist) {
+
+
+        let AddMaterialToLibrary;
+        if (body.sessionMaterial.url !== "") {
+            AddMaterialToLibrary = await AddMaterialDao(Material)
+        }
+        let SessionCreated = await BookaSlotByStudent(SessionDBDetails)
+        const combinedArray = [...new Set([...checkSlotExist.bookedData, ...body.AllDate])];
+        const isbookedDates = getAllDate.every(date => combinedArray.includes(date));
+        
+        SessionCreated = await Promise.all(
+
+
+
+            SessionCreated?.map(async (slot) => {
+
+                let sessionDetails
+                if (isbookedDates) {
+                    sessionDetails = await updateSlotBooked(slot.tutorUsercode, slot.sessionDetails, combinedArray, body.month);
+                } else {
+                    sessionDetails = await updateSlotBookedForSingle(slot.tutorUsercode, slot.sessionDetails, combinedArray, body.month);
+                }
+
+
+                return {
+                    sessionId: slot.sessionId,
+                    studenUsercode: slot.studenUsercode,
+                    Bookedby: slot.Bookedby,
+                    tutorUsercode: slot.tutorUsercode,
+                    sessionMaterial: slot.sessionMaterial,
+                    sessionDetails: slot.sessionDetails,
+                    sessionSubject: slot.sessionSubject,
+                    paymentStatus: slot.paymentStatus,
+                    sessionLink: slot.sessionLink,
+                    sessionStatus: slot.sessionStatus,
+                    topic: slot.topic,
+                    homeworkStatus: slot.homeworkStatus,
+                    sessionSummary: slot.sessionSummary,
+                    studentFeedbackByTutor: slot.studentFeedbackByTutor,
+                    sessionBookingDetails: slot.sessionBookingDetails
+                }
+            })
+        );
+
+        return SessionCreated;
+
+    } else {
+        throw Error('Slot Not found')
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
 
 export const GetBookedSlotsService = async (body) => {
     const bookedSlots = await GetBookedSlotsofStudentDao(body)
@@ -322,6 +459,42 @@ export const GetSlotsByService = async (body) => {
 }
 
 
+export const GetSingleSlotsAvailable = async (body) => {
+    const getSlots = await getSlotsForBooking(body.subject)
+
+    if (getSlots.length > 0) {
+        let userCodesList = []
+        getSlots.map((tutor) => {
+            userCodesList.push(tutor.userCode)
+        })
+        let slots = await getSingleSlots(userCodesList, body.date)
+
+        let filteredslots = slots.filter(slot => slot.day === body.day)
+
+        filteredslots = await Promise.all(
+            filteredslots?.map(async (slot) => {
+                const tutor = getSlots.find(t => t.userCode === slot.userCode);
+
+                const getAvailablility = await getAvailableStatus({ tutorUsercode: slot.userCode, time: { date: body.date, from: slot.from, to: slot.to } })
+
+                if (tutor && !getAvailablility) {
+                    return {
+                        slotId: slot._id,
+                        slotDatails: slot,
+                        tutorDetails: tutor
+                    }
+                }
+                return null;
+
+            })
+        );
+        filteredslots = filteredslots.filter((item) => item !== null)
+
+        return filteredslots;
+    }
+    return []
+}
+
 export const updateSlotService = async (body) => {
 
     const getbookedSession = await getParticularSession(body.sessionId);
@@ -462,3 +635,11 @@ export const updateSlotLinkService = async (body) => {
     return updateSession
 
 }
+
+
+export const getAvailableStatus = async (body) => {
+    const BookedSlot = await checkIsSlotAvailable(body.tutorUsercode, body.time)
+    return BookedSlot
+
+}
+
